@@ -1,0 +1,46 @@
+### Actuator ###
+# Spring Boot Admin Client 설정.
+
+# Spring Boot Admin Server 와 연결하기 위한 설정.
+spring:
+  config:
+    import:
+      - file:${app.config-path}/admin/application-admin.yml       # Admin 정보 파일.
+  boot:
+    admin:
+      client:
+        enabled: false                                              # Admin Client 사용 여부.
+        url: ${admin.url}                                           # Admin Server URL.
+        username: ${admin.username}                                 # Admin Server 계정 ID.
+        password: ${admin.password}                                 # Admin Server 계정 Password.
+        instance:
+          name: ${server.servlet.application-display-name}          # Admin Server 에서 표시되는 명칭.
+          service-base-url: http://${server.address}:${server.port} # Client Server URL.
+          metadata:
+            user.name: ${spring.security.user.name}                 # Client Server 계정 ID.
+            user.password: ${spring.security.user.password}         # Client Server 계정 Password.
+        period: 60000ms                                             # Admin Server 로 등록 요청 주기.
+
+# Spring Boot Admin Server 로 전송할 데이터 설정.
+management:
+  endpoint:
+    health:
+      show-details: when_authorized             # Client Server 인증을 거쳤을 경우에만 Health 전달.
+      cache:
+        time-to-live: 0ms                       # Health 캐싱 주기.
+    metrics:
+      enabled: true                             # Client Server metrics 정보 전달 여부.
+      cache:
+        time-to-live: 0ms                       # Metrics 캐싱 주기.
+    env:
+      enabled: true
+      cache:
+        time-to-live: 0ms                       # Environment 캐싱 주기.
+    shutdown:
+      enabled: false
+    startup:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: '*'                            # Open 할 Actuator endpoint 설정.
