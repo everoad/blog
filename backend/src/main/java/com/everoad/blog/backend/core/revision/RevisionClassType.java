@@ -3,7 +3,9 @@ package com.everoad.blog.backend.core.revision;
 
 import com.everoad.blog.backend.domain.member.Member;
 import com.everoad.blog.backend.domain.member.MemberRole;
+import com.everoad.blog.backend.domain.post.Post;
 import com.everoad.blog.backend.dto.member.MemberRevisionDto;
+import com.everoad.blog.backend.dto.post.PostRevisionDto;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,7 +20,8 @@ import java.util.List;
 @Getter
 public enum RevisionClassType {
 
-  MEMBER("member", Member.class, MemberRevisionDto.class);
+  MEMBER("member", Member.class, MemberRevisionDto.class),
+  POST("post", Post.class, PostRevisionDto.class);
 
   private final String name;
   private final Class<?> domainClass;

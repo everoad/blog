@@ -1,13 +1,14 @@
 package com.everoad.blog.backend.domain.base;
 
-import com.everoad.blog.backend.domain.member.Member;
 import lombok.Getter;
 import org.hibernate.envers.NotAudited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EntityListeners;
+import javax.persistence.MappedSuperclass;
 
 @Getter
 @EntityListeners(AuditingEntityListener.class)
@@ -16,14 +17,12 @@ public class BaseEntity extends BaseTimeEntity {
 
   @NotAudited
   @CreatedBy
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "created_by", updatable = false, nullable = false)
-  private Member createdBy;
+  @Column(name = "created_by", updatable = false, nullable = false)
+  private String createdBy;
 
   @NotAudited
   @LastModifiedBy
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "modified_by", nullable = false)
-  private Member modifiedBy;
+  @Column(name = "modified_by", nullable = false)
+  private String modifiedBy;
 
 }

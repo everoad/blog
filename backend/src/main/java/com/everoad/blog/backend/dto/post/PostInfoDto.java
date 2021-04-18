@@ -14,12 +14,12 @@ public class PostInfoDto {
   private Long id;
   private String title;
   private String description;
-  private MemberInfoDto createdBy;
+  private String createdBy;
   private LocalDateTime createdTime;
   private Integer viewCount;
 
   @Builder
-  public PostInfoDto(Long id, String title, String description, MemberInfoDto createdBy, LocalDateTime createdTime, Integer viewCount) {
+  public PostInfoDto(Long id, String title, String description, String createdBy, LocalDateTime createdTime, Integer viewCount) {
     this.id = id;
     this.title = title;
     this.description = description;
@@ -33,7 +33,7 @@ public class PostInfoDto {
         .id(post.getId())
         .title(post.getTitle())
         .description(post.getDescription())
-        .createdBy(MemberInfoDto.create(post.getCreatedBy()))
+        .createdBy(post.getCreatedBy())
         .createdTime(post.getCreatedTime())
         .build();
   }

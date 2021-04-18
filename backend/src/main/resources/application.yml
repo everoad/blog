@@ -1,7 +1,7 @@
 
 server:
   address: 127.0.0.1
-  port: 8080
+  port: 8084
   http2:
     enabled: false # HTTP2 \uC0AC\uC6A9 \uC5EC\uBD80. \uC0AC\uC6A9\uC2DC SSL(TLS) \uD544\uC218.
 
