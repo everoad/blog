@@ -41,10 +41,7 @@ public abstract class RevisionRepositorySupport {
   }
 
   protected AuditQuery getAuditQuery(Class<?> domainClass) {
-    return getAuditReader().createQuery().forRevisionsOfEntityWithChanges(domainClass, true)
-
-        //.traverseRelation("rev", JoinType.INNER)
-        ;
+    return getAuditReader().createQuery().forRevisionsOfEntityWithChanges(domainClass, true);
   }
 
   protected Page<? extends BaseRevisionDto> applyPagination(RevisionClassType clazzType, Pageable pageable, RevisionSearchDto searchDto) {

@@ -24,13 +24,22 @@ public class ApplicationConfig implements WebMvcConfigurer {
 
 
   @Bean
-  public AuditorAware<Member> auditorProvider() {
-    return () -> Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-        .filter(Authentication::isAuthenticated)
-        .map(Authentication::getPrincipal)
-        .map(MemberAdapter.class::cast)
-        .map(MemberAdapter::getMember);
+  public AuditorAware<String> auditorProvider() {
+    return () -> {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      if (authentication.isAuthenticated()) {
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof MemberAdapter) {
+          MemberAdapter adapter = (MemberAdapter) principal;
+          return Optional.ofNullable(adapter.getMember().getId());
+        } else {
+          return Optional.of(String.valueOf(principal));
+        }
+      }
+      return Optional.empty();
+    };
   }
+
 
   @Bean
   public PasswordEncoder passwordEncoder() {

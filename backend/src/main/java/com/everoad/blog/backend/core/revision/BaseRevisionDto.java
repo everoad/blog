@@ -22,7 +22,7 @@ public class BaseRevisionDto {
   public BaseRevisionDto(MyRevisionEntity entity, RevisionType revisionType, Collection<?> modified) {
     this.rev = entity.getRev();
     this.timestamp = entity.getTimestamp();
-    this.revCreatedBy = entity.getRevCreatedBy().getId();
+    this.revCreatedBy = entity.getRevCreatedBy();
     this.type = revisionType.name();
     this.modified = modified;
   }
@@ -31,7 +31,4 @@ public class BaseRevisionDto {
     return modified.contains(name) ? "CHANGED" : "-";
   }
 
-  /*public String getIdClassName() {
-
-  }*/
 }

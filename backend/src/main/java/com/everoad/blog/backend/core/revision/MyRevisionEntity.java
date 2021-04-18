@@ -28,8 +28,7 @@ public class MyRevisionEntity {
   private Long timestamp;
 
   @CreatedBy
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "rev_created_by", updatable = false, nullable = false)
-  private Member revCreatedBy;
+  @Column(name = "rev_created_by", updatable = false)
+  private String revCreatedBy;
 
 }

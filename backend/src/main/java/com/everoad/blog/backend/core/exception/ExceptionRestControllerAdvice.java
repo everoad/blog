@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Slf4j
-@RestControllerAdvice(basePackages = {"com.northbr.web.controller.api"})
+@RestControllerAdvice(basePackages = {"com.everoad.blog.backend.controller"})
 @RequiredArgsConstructor
 public class ExceptionRestControllerAdvice {
 
