@@ -14,7 +14,7 @@ spring:
         username: ${admin.username}                                 # Admin Server 계정 ID.
         password: ${admin.password}                                 # Admin Server 계정 Password.
         instance:
-          name: ${server.servlet.application-display-name}          # Admin Server 에서 표시되는 명칭.
+          name: ${app.name}-API                                     # Admin Server 에서 표시되는 명칭.
           service-base-url: http://${server.address}:${server.port} # Client Server URL.
           metadata:
             user.name: ${spring.security.user.name}                 # Client Server 계정 ID.

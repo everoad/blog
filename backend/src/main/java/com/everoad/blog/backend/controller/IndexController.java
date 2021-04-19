@@ -18,7 +18,7 @@ public class IndexController {
 
   private final MemberService memberService;
 
-  @PostMapping("/register")
+  @PostMapping("/api/register")
   public ApiResponse<?> register(@Valid @RequestBody MemberSaveDto saveDto) {
     memberService.register(saveDto);
     return new ApiResponse<>();
