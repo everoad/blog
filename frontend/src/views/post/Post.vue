@@ -2,7 +2,7 @@
   <div>
     <PostList
       url="/api/posts"
-      size="10"
+      :size="10"
     />
   </div>
 </template>
@@ -18,7 +18,10 @@ export default {
   },
   data() {
     return {
-      items: []
+      items: [],
+
+      page: 0,
+      totalElements: 0,
     }
   },
   mounted() {
