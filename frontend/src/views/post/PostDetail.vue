@@ -11,11 +11,6 @@ export default {
   props: {
     id: Number
   },
-  data() {
-    return {
-      items: []
-    }
-  },
   mounted() {
     this.getData()
   },

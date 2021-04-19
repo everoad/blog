@@ -1,21 +1,20 @@
 <template>
   <div>
-    <PostItem
-        v-for="(item, index) in items"
-        :item="item"
-        :index="index"
-        :key="item.id" />
+    <PostList
+      url="/api/posts"
+      size="10"
+    />
   </div>
 </template>
 
 <script>
-import PostItem from "@/views/post/PostItem"
+import PostList from "@/views/post/PostList"
 import axios from "axios"
 
 export default {
   name: 'Post',
   components: {
-    PostItem
+    PostList
   },
   data() {
     return {
