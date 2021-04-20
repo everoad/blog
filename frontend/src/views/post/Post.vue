@@ -10,7 +10,7 @@
 
 <script>
 import PostItem from "@/views/post/PostItem"
-import axios from "axios"
+import {postService} from "@/services"
 
 export default {
   name: 'Post',
@@ -37,8 +37,7 @@ export default {
   methods: {
     async getData() {
       const {page, size} = this
-      const params = {page, size}
-      const {data: {body: {content, last}}} = await axios.get('/api/posts', {params})
+      const {data: {body: {content, last}}} = await postService.getPostList({page, size})
       content.forEach(one => this.items.push(one))
       this.hasNext = !last
     },

@@ -28,7 +28,7 @@ main {
   display: flex;
   position: relative;
   width: 1080px;
-  margin: 0 auto;
+  margin: 0 auto 100px;
 }
 
 main>div:first-child {

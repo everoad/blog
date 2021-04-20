@@ -31,14 +31,8 @@ public class PostService {
   private final PostQueryRepository postQueryRepository;
   private final PostRepository postRepository;
 
-  private int count = 0;
-
   public Slice<PostListDto> selectPostList(PostSearchDto searchDto, Pageable pageable) {
-    List<PostListDto> collect = IntStream.range(count, count + 10)
-        .mapToObj(num -> new PostListDto((long) count++, "title" + count, "desc" + count,0, LocalDateTime.now())).collect(Collectors.toList());
-
-    return new SliceImpl<>(collect, pageable, true);
-//    return postQueryRepository.findAll(searchDto, pageable);
+    return postQueryRepository.findAll(searchDto, pageable);
   }
 
   @Transactional

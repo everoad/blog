@@ -1,33 +1,45 @@
 <template>
   <main>
     <article>
-      <header>BLOG</header>
-      <input type="text" class="input input-lg" placeholder="ID.." ref="id" v-model="id" />
-      <input type="password" class="input input-lg" placeholder="Password.." v-model="password" />
-      <button class="btn btn-green btn-block btn-lg" @click="login">LOGIN</button>
-      <div>
-        <router-link to="/posts">돌아가기</router-link>
-      </div>
+      <form @submit.prevent="handleSubmit">
+        <header>BLOG</header>
+        <input type="text" class="input input-lg" placeholder="ID.." ref="username" v-model="username" />
+        <input type="password" class="input input-lg" placeholder="Password.." v-model="password" />
+        <button class="btn btn-green btn-block btn-lg" :disabled="submitted">LOGIN</button>
+        <div>
+          <router-link to="/posts">돌아가기</router-link>
+        </div>
+      </form>
     </article>
   </main>
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex"
+
 export default {
   name: 'Login',
   data() {
     return {
-      id: null,
-      password: null
+      username: null,
+      password: null,
+      submitted: false
     }
   },
+  computed: {
+    ...mapState('auth', ['status'])
+  },
   mounted() {
-    this.$refs.id.focus()
+    this.$refs.username.focus()
   },
   methods: {
-    login() {
-      const {id, password} = this
-      console.log('login', id, password)
+    ...mapActions('auth', ['login']),
+    handleSubmit () {
+      this.submitted = true
+      const { username, password } = this
+      if (username && password) {
+        this.login({ username, password })
+      }
     }
   }
 }

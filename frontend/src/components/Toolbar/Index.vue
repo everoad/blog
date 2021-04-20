@@ -1,10 +1,8 @@
 <template>
   <div>
-    <button v-on:click="handleClick">펼치기</button>
+    <button class="icon-btn" @click.stop="handleClick"><font-awesome-icon icon="bars"/></button>
     <ul v-if="visible">
-      <li v-for="(item, index) in items" :key="index">
-        {{ item.text }}
-      </li>
+      <slot />
     </ul>
   </div>
 </template>
@@ -12,7 +10,10 @@
 
 export default {
   props: {
-    items: Array
+    items: {
+      type: Array,
+      required: false
+    }
   },
   data() {
     return {
@@ -21,25 +22,25 @@ export default {
   },
   methods: {
     handleClick() {
+      window.addEventListener('click', this.handleScreenClick)
       this.visible = !this.visible
+    },
+    handleScreenClick() {
+      window.removeEventListener('click', this.handleScreenClick)
+      this.visible = false
     }
+  },
+  destroyed() {
+    window.removeEventListener('click', this.handleScreenClick)
   }
 }
 </script>
 
 <style scoped>
 ul {
-  width: 150px;
   position: absolute;
-  border: 1px solid #eee;
+  border: 1px solid #ccc;
   box-sizing: border-box;
-}
-
-li {
-  padding: 1rem;
-}
-
-ul > li + li {
-  border-top: 1px solid #eee;
+  z-index: 100;
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <header>
-    <div>ER BLOG</div>
+    <div class="logo">
+      <router-link to="/posts">BLOG</router-link>
+    </div>
     <div>
       <input type="text"/>
       <button class="icon-btn">
@@ -8,15 +10,34 @@
       </button>
     </div>
     <div>
-      <router-link to="/posts/editor">글쓰기</router-link>
-      <router-link to="/login">로그인</router-link>
+      <Toolbar>
+        <ToolbarItem to="/posts/editor" text="글쓰기" :visible="status.loggedIn" />
+        <ToolbarItem to="/login" text="로그인" :visible="!status.loggedIn" />
+        <ToolbarItem :click="handleLogout" text="로그아웃" :visible="status.loggedIn" />
+      </Toolbar>
     </div>
   </header>
 </template>
 <script>
+import { mapState, mapActions } from "vuex"
+import Toolbar from "@/components/Toolbar/Index"
+import ToolbarItem from "@/components/Toolbar/ToolbarItem"
 
 export default {
-  name: 'Sidebar'
+  name: 'Sidebar',
+  components: {
+    Toolbar,
+    ToolbarItem
+  },
+  computed: {
+    ...mapState('auth', ['status'])
+  },
+  methods: {
+    ...mapActions('auth', ['logout']),
+    handleLogout() {
+      this.logout()
+    }
+  }
 }
 </script>
 
@@ -30,6 +51,13 @@ header {
   display: flex;
   justify-content: space-between;
   justify-items: center;
+}
+
+.logo>a {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #4CAF50;
+  text-decoration: none;
 }
 
 input {
