@@ -1,18 +1,19 @@
 <template>
   <div id="app">
-    <Layout>
+    <component :is="layout">
       <router-view/>
-    </Layout>
+    </component>
   </div>
 </template>
 
 <script>
-import Layout from './views/layout/Layout'
 
 export default {
   name: 'App',
-  components: {
-    Layout
+  computed: {
+    layout() {
+      return (this.$route.meta.layout || 'layout')
+    }
   }
 }
 </script>

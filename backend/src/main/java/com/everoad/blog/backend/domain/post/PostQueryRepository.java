@@ -7,6 +7,7 @@ import com.everoad.blog.backend.dto.post.QPostListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -19,8 +20,8 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
     super(Post.class);
   }
 
-  public Page<PostListDto> findAll(PostSearchDto searchDto, Pageable pageable) {
-    return applyPagination(pageable, query -> query
+  public Slice<PostListDto> findAll(PostSearchDto searchDto, Pageable pageable) {
+    return applyPaginationForSlice(pageable, query -> query
         .select(
             new QPostListDto(
                 post.id,

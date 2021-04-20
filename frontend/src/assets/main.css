@@ -54,13 +54,24 @@ html {
     color: #2c3e50;
 }
 
-input[type=text].input, select.input {
+input.input,
+select.input {
     width: 100%;
     padding: 0.5rem 1rem;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+.input::placeholder {
+    color: #bbb;
+}
+.input.input-lg {
+    padding: 0.8rem;
+    font-size: 1.5rem;
+}
+.input:focus {
+    outline-color: #4CAF50;
 }
 .textarea {
     width: 100%;
@@ -96,6 +107,13 @@ input[type=text].input, select.input {
 }
 .btn-default:hover {
     background-color: rgba(0,0,0,0.1);
+}
+.btn.btn-block {
+    width: 100%;
+}
+.btn.btn-lg {
+    padding: 1rem;
+    font-size: 1.2rem;
 }
 .icon-btn {
     background: #fff;
