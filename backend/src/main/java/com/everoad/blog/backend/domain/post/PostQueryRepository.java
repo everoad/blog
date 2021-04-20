@@ -26,6 +26,7 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
             new QPostListDto(
                 post.id,
                 post.title,
+                post.description,
                 post.viewCount,
                 post.createdTime
             )

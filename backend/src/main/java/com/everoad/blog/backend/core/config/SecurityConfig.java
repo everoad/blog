@@ -132,7 +132,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       filter.setAuthenticationManager(authenticationManagerBean());
       filter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
       filter.setAuthenticationFailureHandler(authenticationFailureHandler);
-      filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/auth/login", HttpMethod.POST.name()));
+      filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/auth/login", HttpMethod.POST.name()));
       filter.setObjectMapper(objectMapper);
       return filter;
     }
@@ -143,7 +143,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       filter.setAuthenticationManager(authenticationManagerBean());
       filter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
       filter.setAuthenticationFailureHandler(authenticationFailureHandler);
-      filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/auth/token", HttpMethod.POST.name()));
+      filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/auth/token", HttpMethod.POST.name()));
       filter.setConnectionService(connectionService);
       filter.setAuthTokenProvider(authTokenProvider);
       filter.setObjectMapper(objectMapper);
@@ -159,9 +159,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       http
           .csrf().disable()
           .authorizeRequests()
-          .mvcMatchers(HttpMethod.POST, "/posts/**").hasAnyRole(MemberRole.ADMIN.name())
-          .mvcMatchers(HttpMethod.DELETE, "/posts/**").hasAnyRole(MemberRole.ADMIN.name())
-          .mvcMatchers(HttpMethod.PUT, "/posts/**").hasAnyRole(MemberRole.ADMIN.name())
+          .mvcMatchers(HttpMethod.POST, "/api/posts/**").hasAnyRole(MemberRole.ADMIN.name())
+          .mvcMatchers(HttpMethod.DELETE, "/api/posts/**").hasAnyRole(MemberRole.ADMIN.name())
+          .mvcMatchers(HttpMethod.PUT, "/api/posts/**").hasAnyRole(MemberRole.ADMIN.name())
+          .mvcMatchers("/api/auth").authenticated()
           .anyRequest().permitAll()
           .and()
           .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

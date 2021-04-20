@@ -9,10 +9,5 @@ module.exports = {
         target: 'http://localhost:8084'
       }
     }
-  },
-  chainWebpack: config => {
-    config.externals({
-      apiUrl: 'http://localhost:8084'
-    })
   }
 };

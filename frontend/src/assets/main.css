@@ -55,13 +55,21 @@ html {
 }
 
 input.input,
-select.input {
+select.input,
+textarea.input {
     width: 100%;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    color: #555;
+}
+textarea.input {
+    min-height: 300px;
+    resize: vertical;
 }
 .input::placeholder {
     color: #bbb;
@@ -73,15 +81,6 @@ select.input {
 .input:focus {
     outline-color: #4CAF50;
 }
-.textarea {
-    width: 100%;
-    min-height: 300px;
-    padding: 0.5rem 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
 .btn {
     border: none;
     padding: 0.5rem 1rem;

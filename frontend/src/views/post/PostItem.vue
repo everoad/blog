@@ -2,15 +2,14 @@
   <router-link :to="{ name: 'PostDetail', params: { id: item.id }}" tag="article">
     <div class="content">
       <header>{{ item.title }}</header>
-      <div>{{ item.description }}</div>
-      <footer>{{ item.createdTime }}</footer>
+      <div v-html="item.description.substring(0,120)+'..'"></div>
+      <footer>{{ item.createdTime | moment('YYYY-MM-DD HH:mm') }}</footer>
     </div>
     <div v-if="item.image" class="image"></div>
   </router-link>
 </template>
 
 <script>
-
 export default {
   name: 'PostItem',
   components: {},
@@ -29,7 +28,7 @@ export default {
 <style scoped>
 article {
   width: 100%;
-  padding: 1.5rem 1.5rem;
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
   height: 142px;

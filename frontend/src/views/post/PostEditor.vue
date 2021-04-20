@@ -2,13 +2,12 @@
   <article>
     <div class="input-wrapper">
       <label for="title">제목</label>
-      <input type="text" class="input" id="title" v-model="edit.title" />
+      <input type="text" class="input" id="title" v-model="title"/>
     </div>
-    <div>
+    <div class="input-wrapper">
       <label for="title">내용</label>
-      <textarea class="textarea" v-model="edit.description" />
+      <Vue2TinymceEditor v-model="description"/>
     </div>
-<!--    <TipTap/>-->
     <div class="btn-wrapper">
       <button class="btn btn-green" v-on:click="handleSaveBtnClick">저장</button>
     </div>
@@ -16,28 +15,27 @@
 </template>
 
 <script>
-import axios from "axios"
-// import TipTap from "@/components/Tiptap/Index"
+import { Vue2TinymceEditor } from "vue2-tinymce-editor"
 
+import {postService} from "@/services"
+import router from "@/routers"
 
 export default {
   name: 'PostEditor',
   components: {
-    // TipTap: TipTap
+    Vue2TinymceEditor
   },
   data() {
     return {
-      edit: {
-        title: null,
-        description: null
-      }
+      title: null,
+      description: null
     }
   },
   methods: {
     async handleSaveBtnClick() {
-      const { edit } = this
-      const res = await axios.post('/api/posts', edit)
-      console.log(res)
+      const {title, description} = this
+      const {data:{body}} = await postService.addPost({title, description})
+      router.push(`/posts/${body}`)
     }
   }
 }
@@ -50,9 +48,11 @@ label {
   font-weight: 600;
   padding-bottom: 0.5rem;
 }
+
 .input-wrapper {
   margin-bottom: 1rem;
 }
+
 .btn-wrapper {
   text-align: right;
 }
