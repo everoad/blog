@@ -5,11 +5,9 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.support.Querydsl;
-import org.springframework.data.repository.support.PageableExecutionUtils;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
@@ -100,6 +98,13 @@ public abstract class Querydsl4RepositorySupport {
         .offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
   }
 
+  protected <T> Slice<T> applyPaginationForSlice(Pageable pageable, Function<JPAQueryFactory, JPAQuery<T>> contentQuery) {
+    JPAQuery<T> jpaContentQuery = contentQuery.apply(getQueryFactory());
+    List<T> content = jpaContentQuery.orderBy(getOrderBy(pageable))
+        .offset(pageable.getOffset()).limit(pageable.getPageSize() + 1).fetch();
+    return toSlice(content, pageable);
+  }
+
   protected <T> Expression<T> myAs(Expression<T> expression) {
     String expressionStr = expression.toString();
     String alias = convertPathToCamelCase(expressionStr.substring(expressionStr.indexOf(".") + 1));
@@ -153,5 +158,15 @@ public abstract class Querydsl4RepositorySupport {
 
   private final Function<MatchResult, String> replaceFunc = matchResult -> matchResult.group().replace(".", "").toUpperCase();
 
+
+  protected <T> Slice<T> toSlice(List<T> content, Pageable pageable) {
+    boolean hasNext = false;
+
+    if (content.size() > pageable.getPageSize()) {
+      content.remove(pageable.getPageSize());
+      hasNext = true;
+    }
+    return new SliceImpl<>(content, pageable, hasNext);
+  }
 
 }

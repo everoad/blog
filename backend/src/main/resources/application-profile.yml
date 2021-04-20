@@ -5,36 +5,9 @@
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: prod
     import:
-      - file:${app.config-path}/web/application-local.yml
-
----
-## dev ##
-spring:
-  config:
-    activate:
-      on-profile: dev
-    import:
-      - file:${app.config-path}/web/application-dev.yml
-
----
-## prod1 ##
-spring:
-  config:
-    activate:
-      on-profile: prod1
-    import:
-      - file:${app.config-path}/web/application-prod1.yml
-
----
-## prod2 ##
-spring:
-  config:
-    activate:
-      on-profile: prod2
-    import:
-      - file:${app.config-path}/web/application-prod2.yml
+      - file:${app.config-path}/application-prod.yml
 
 ---
 ## test ##

@@ -1,6 +1,5 @@
 package com.everoad.blog.backend.core.revision;
 
-import com.everoad.blog.backend.domain.member.Member;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.RevisionEntity;
@@ -20,7 +19,7 @@ import javax.persistence.*;
 public class MyRevisionEntity {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @RevisionNumber
   private Long rev;
 

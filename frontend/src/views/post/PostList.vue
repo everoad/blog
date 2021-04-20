@@ -10,16 +10,6 @@
     <div v-else class="no-data">
       {{ noDataMsg }}
     </div>
-    <ul class="pagination">
-      <li v-on:click="page = 0">＜</li>
-      <li v-for="index in range"
-          :key="index"
-          :class="{ active: (page === index) }"
-          v-on:click="page = index">
-        {{ index + 1 }}
-      </li>
-      <li v-on:click="page = pageCount - 1">＞</li>
-    </ul>
   </div>
 </template>
 
@@ -54,9 +44,7 @@ export default {
     return {
       items: [],
       page: 0,
-      indent: 4,
-      range: [],
-      totalElements: 0
+      hasNext: true
     }
   },
   mounted() {
@@ -71,29 +59,14 @@ export default {
       this.getData()
     }
   },
-  computed: {
-    pageCount() {
-      const {page, totalElements, size} = this
-      return (page === 0 && totalElements === 0) ? 1 : Math.ceil(totalElements / size)
-    },
-  },
   methods: {
     async getData() {
       const {page, url, size, keywords} = this
       const params = {page, size, ...keywords}
-      const {data: {body: {content, totalElements}}} = await axios.get(url, {params})
+      const {data: {body: {content, hasNext}}} = await axios.get(url, {params})
       this.items = content
-      this.totalElements = totalElements
-      this.calculateRange()
-    },
-
-    calculateRange() {
-      const {page, indent, pageCount} = this
-      const start = (page - indent) > -1 ? (page - indent) : 0
-      const end = (page + indent) < (pageCount - 1) ? (page + indent) : (pageCount - 1)
-      this.range = new Array(end - start + 1).fill(start).map((n, i) => n + i)
-    },
-
+      this.hasNext = hasNext
+    }
   }
 }
 </script>

@@ -10,6 +10,7 @@ import com.everoad.blog.backend.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,9 +23,9 @@ public class PostController {
   private final PostService postService;
 
   @GetMapping
-  public ApiResponse<Page<PostListDto>> getPostList(PostSearchDto searchDto, Pageable pageable) {
-    Page<PostListDto> page = postService.selectPostList(searchDto, pageable);
-    return new ApiResponse<>(page);
+  public ApiResponse<Slice<PostListDto>> getPostList(PostSearchDto searchDto, Pageable pageable) {
+    Slice<PostListDto> slice = postService.selectPostList(searchDto, pageable);
+    return new ApiResponse<>(slice);
   }
 
 
