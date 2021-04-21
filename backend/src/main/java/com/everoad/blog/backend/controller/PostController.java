@@ -17,7 +17,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/posts", produces = Const.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/posts", produces = Const.APPLICATION_JSON_VALUE)
 public class PostController {
 
   private final PostService postService;

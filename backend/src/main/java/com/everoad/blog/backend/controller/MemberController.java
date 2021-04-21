@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/users", produces = Const.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/users", produces = Const.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -22,4 +22,5 @@ public class MemberController {
     MemberInfoDto dto = memberService.selectMemberByToken(token);
     return new ApiResponse<>(dto);
   }
+
 }

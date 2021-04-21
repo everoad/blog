@@ -1,26 +1,24 @@
-
 server:
   address: 127.0.0.1
   port: 8084
   http2:
-    enabled: false # HTTP2 \uC0AC\uC6A9 \uC5EC\uBD80. \uC0AC\uC6A9\uC2DC SSL(TLS) \uD544\uC218.
-
+    enabled: false
   compression:
-    enabled: true # \uC751\uB2F5 \uB370\uC774\uD130 \uC555\uCD95 \uC5EC\uBD80.
-    mime-types: application/json,text/html,text/css,application/javascript
+    enabled: true
+    mime-types: application/json
   servlet:
-    application-display-name: API_SERVER
+    application-display-name: ${app.name}-API
+    contextPath: /api
 
-### \uC2A4\uD504\uB9C1 \uC124\uC815 ###
 spring:
   config:
     import:
-      - classpath:application-db.yml                  # DB \uAE30\uBCF8 \uC124\uC815.
-      - classpath:application-profile.yml             # profile\uC5D0 \uB530\uB77C \uC678\uBD80 \uC124\uC815 \uD30C\uC77C \uAC00\uC838\uC634.
-      ##- optional:classpath:application-actuator.yml   # actuator \uC124\uC815.( optional )
+      - classpath:application-db.yml
+      - classpath:application-profile.yml
+      #- optional:classpath:application-actuator.yml
   servlet:
     multipart:
-      max-file-size: 50MB # multipart \uC6A9\uB7C9 \uC81C\uD55C.
+      max-file-size: 50MB
   messages:
     basename: messages/message
     encoding: UTF-8
@@ -33,5 +31,5 @@ app:
 
 logging:
   file:
-    path: ${app.default-path}/api/logs # \uB85C\uADF8 \uC800\uC7A5 \uC704\uCE58.
-    name: ${logging.file.path}/app.log # Spring Boot Admin \uC5D0\uC11C \uC870\uD68C\uD560 \uB85C\uADF8\uD30C\uC77C.
+    path: ${app.default-path}/api/logs
+    name: ${logging.file.path}/app.log

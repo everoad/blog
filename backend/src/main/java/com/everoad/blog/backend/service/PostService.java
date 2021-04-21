@@ -1,5 +1,7 @@
 package com.everoad.blog.backend.service;
 
+import com.everoad.blog.backend.domain.category.Category;
+import com.everoad.blog.backend.domain.category.CategoryRepository;
 import com.everoad.blog.backend.domain.post.Post;
 import com.everoad.blog.backend.domain.post.PostQueryRepository;
 import com.everoad.blog.backend.domain.post.PostRepository;
@@ -31,6 +33,8 @@ public class PostService {
   private final PostQueryRepository postQueryRepository;
   private final PostRepository postRepository;
 
+  private final CategoryRepository categoryRepository;
+
   public Slice<PostListDto> selectPostList(PostSearchDto searchDto, Pageable pageable) {
     return postQueryRepository.findAll(searchDto, pageable);
   }
@@ -44,10 +48,12 @@ public class PostService {
 
   @Transactional
   public Long insertPost(PostSaveDto saveDto) {
-    Post post = saveDto.toEntity();
+    Category category = queryCategory(saveDto);
+    Post post = saveDto.toEntity(category);
     postRepository.save(post);
     return post.getId();
   }
+
 
   @Transactional
   public void updatePost(Long postId, PostSaveDto saveDto) {
@@ -64,6 +70,11 @@ public class PostService {
   public Post queryPost(Long postId) {
     return postRepository.findById(postId)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+  }
+
+  private Category queryCategory(PostSaveDto saveDto) {
+    return categoryRepository.findById(saveDto.getCategoryId())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리 입니다."));
   }
 
 }

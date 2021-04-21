@@ -1,25 +1,40 @@
 package com.everoad.blog.backend.dto.post;
 
+import com.everoad.blog.backend.domain.category.Category;
 import com.everoad.blog.backend.domain.post.Post;
 import lombok.*;
 
-@Getter @Setter
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostSaveDto {
 
+  @NotBlank
   private String title;
+  @NotBlank
   private String description;
+  @NotBlank
+  private Boolean display;
+  @NotBlank
+  private Integer categoryId;
 
   @Builder
-  public PostSaveDto(String title, String description) {
+  public PostSaveDto(String title, String description, Boolean display, Integer categoryId) {
     this.title = title;
     this.description = description;
+    this.display = display;
+    this.categoryId = categoryId;
   }
 
-  public Post toEntity() {
+  public Post toEntity(Category category) {
     return Post.builder()
         .title(title)
+        .display(display)
         .description(description)
+        .category(category)
         .build();
   }
 }

@@ -33,11 +33,35 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
         )
         .from(post)
         .where(
+            post.display.isTrue(),
+            keywordLike(searchDto.getKeyword())
+
+        )
+        .orderBy(post.createdTime.desc())
+    );
+  }
+
+
+  public Slice<PostListDto> findAllWithDisplayIsFalse(PostSearchDto searchDto, Pageable pageable) {
+    return applyPaginationForSlice(pageable, query -> query
+        .select(
+            new QPostListDto(
+                post.id,
+                post.title,
+                post.description,
+                post.viewCount,
+                post.createdTime
+            )
+        )
+        .from(post)
+        .where(
+            post.display.isFalse(),
             keywordLike(searchDto.getKeyword())
         )
         .orderBy(post.createdTime.desc())
     );
   }
+
 
   private BooleanExpression keywordLike(String keyword) {
     return StringUtils.hasText(keyword) ? contains(post.title, keyword).or(contains(post.description, keyword)) : null;

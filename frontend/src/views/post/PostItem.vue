@@ -3,9 +3,12 @@
     <div class="content">
       <header>{{ item.title }}</header>
       <div v-html="item.description.substring(0,120)+'..'"></div>
-      <footer>{{ item.createdTime | moment('YYYY-MM-DD HH:mm') }}</footer>
+      <footer>
+        <div>작성일 {{ item.createdTime | moment('YYYY-MM-DD HH:mm') }}</div>
+        <div>조회수 {{ item.viewCount }}</div>
+      </footer>
     </div>
-    <div v-if="item.image" class="image"></div>
+    <div class="image"></div>
   </router-link>
 </template>
 
@@ -19,7 +22,8 @@ export default {
       title: String,
       image: String,
       description: String,
-      createdTime: String
+      createdTime: String,
+      viewCount: Number
     }
   }
 }
@@ -31,7 +35,6 @@ article {
   padding: 1rem;
   display: flex;
   justify-content: space-between;
-  height: 142px;
   cursor: pointer;
   box-sizing: border-box;
 }
@@ -50,6 +53,7 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding: 0.5rem 0;
 }
 
 .image {
@@ -62,5 +66,14 @@ header {
 footer {
   color: #999;
   font-size: 0.9rem;
+}
+
+footer > div {
+  display: inline-block;
+  vertical-align: top;
+}
+
+footer > div + div {
+  margin-left: 1rem;
 }
 </style>
