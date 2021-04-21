@@ -1,10 +1,13 @@
 <template>
-  <div>
+  <div v-if="items.length > 0">
     <PostItem
         v-for="(item, index) in items"
         :item="item"
         :index="index"
         :key="item.id"/>
+  </div>
+  <div v-else class="no-data">
+    게시글이 없습니다.
   </div>
 </template>
 
@@ -52,4 +55,11 @@ export default {
 </script>
 
 <style scoped>
+.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  font-size: 1.5rem;
+}
 </style>
