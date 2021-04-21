@@ -35,7 +35,6 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
         .where(
             post.display.isTrue(),
             keywordLike(searchDto.getKeyword())
-
         )
         .orderBy(post.createdTime.desc())
     );

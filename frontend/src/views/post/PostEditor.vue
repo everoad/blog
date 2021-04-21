@@ -1,6 +1,13 @@
 <template>
   <article>
     <div class="input-wrapper">
+      <label for="display">공개여부</label>
+      <input type="checkbox" id="display" :checked="display"/>
+    </div>
+    <div class="input-wrapper">
+
+    </div>
+    <div class="input-wrapper">
       <label for="title" ref="title">제목</label>
       <input type="text" class="input" id="title" v-model="title"/>
     </div>
@@ -28,7 +35,8 @@ export default {
   data() {
     return {
       title: null,
-      description: null
+      description: null,
+      display: true
     }
   },
   mounted() {
@@ -36,8 +44,8 @@ export default {
   },
   methods: {
     async handleSaveBtnClick() {
-      const {title, description} = this
-      const {data:{body}} = await postService.addPost({title, description})
+      const {title, description, display} = this
+      const {data:{body}} = await postService.addPost({title, description, display})
       router.push(`/posts/${body}`)
     }
   }

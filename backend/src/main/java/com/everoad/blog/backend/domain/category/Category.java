@@ -1,15 +1,15 @@
 package com.everoad.blog.backend.domain.category;
 
 import com.everoad.blog.backend.domain.base.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.everoad.blog.backend.dto.category.CategorySaveDto;
+import lombok.*;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
+@ToString
 @Entity
 @Getter
 @Audited(withModifiedFlag = true)
@@ -25,13 +25,20 @@ public class Category extends BaseEntity {
   @Column(name = "name", nullable = false)
   private String name;
 
-  @Column(name = "parent_id", nullable = false)
-  private Integer parentId;
+  @Column(name = "display", nullable = false)
+  private Boolean display;
 
   @Builder
-  public Category(String name, Integer parentId) {
+  public Category(String name, Boolean display) {
+    Assert.hasText(name, "name is not empty");
+    Assert.notNull(display, "display is not null");
     this.name = name;
-    this.parentId = parentId;
+    this.display = display;
+  }
+
+  public void update(CategorySaveDto saveDto) {
+    this.name = saveDto.getName();
+    this.display = saveDto.getDisplay();
   }
 
 }

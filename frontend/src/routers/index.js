@@ -4,6 +4,8 @@ import Post from "@/views/post/Post"
 import PostEditor from "@/views/post/PostEditor"
 import PostDetail from "@/views/post/PostDetail"
 import Login from "@/views/login/Login"
+import Category from "@/views/category/Category"
+
 import {authUtils} from "@/helpers"
 
 Vue.use(VueRouter)
@@ -16,25 +18,31 @@ const routes = [
   {
     path: '/posts',
     component: Post,
-    meta: { unauthorized: false }
+    meta: {authorized: false}
   },
   {
     path: '/posts/editor',
     component: PostEditor,
-    meta: { unauthorized: true }
+    meta: {authorized: true}
   },
   {
     path: '/posts/:id',
     name: 'PostDetail',
     component: PostDetail,
     props: true,
-    meta: { unauthorized: false }
+    meta: {authorized: false}
+  },
+  {
+    path: '/categories',
+    name: 'Category',
+    component: Category,
+    meta: {authorized: true, layout: 'system-layout'}
   },
   {
     path: '/login',
     name: 'Login',
     component: Login,
-    meta: { unauthorized: false, anonymous: true, layout: 'no-layout' }
+    meta: {authorized: false, anonymous: true, layout: 'no-layout'}
   },
   {
     path: '/logout'
@@ -48,7 +56,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.unauthorized)) {
+  if (to.matched.some(record => record.meta.authorized)) {
     const token = authUtils.getToken()
     if (!token) {
       return next('/login')

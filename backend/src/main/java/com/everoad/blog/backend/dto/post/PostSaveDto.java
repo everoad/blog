@@ -5,6 +5,7 @@ import com.everoad.blog.backend.domain.post.Post;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,7 @@ public class PostSaveDto {
   private String title;
   @NotBlank
   private String description;
-  @NotBlank
+  @NotNull
   private Boolean display;
   @NotBlank
   private Integer categoryId;
