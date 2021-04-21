@@ -1,7 +1,7 @@
 <template>
   <article>
     <div class="input-wrapper">
-      <label for="title">제목</label>
+      <label for="title" ref="title">제목</label>
       <input type="text" class="input" id="title" v-model="title"/>
     </div>
     <div class="input-wrapper">
@@ -30,6 +30,9 @@ export default {
       title: null,
       description: null
     }
+  },
+  mounted() {
+    this.$refs.title.focus()
   },
   methods: {
     async handleSaveBtnClick() {

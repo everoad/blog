@@ -11,17 +11,16 @@
     </div>
     <div>
       <Toolbar>
-        <ToolbarItem to="/posts/editor" text="글쓰기" :visible="status.loggedIn" />
-        <ToolbarItem to="/login" text="로그인" :visible="!status.loggedIn" />
-        <ToolbarItem :click="handleLogout" text="로그아웃" :visible="status.loggedIn" />
+        <ToolbarItem to="/posts/editor" text="글쓰기" :visible="status.loggedIn"/>
+        <ToolbarItem to="/login" text="로그인" :visible="!status.loggedIn"/>
+        <ToolbarItem :click="handleLogout" text="로그아웃" :visible="status.loggedIn"/>
       </Toolbar>
     </div>
   </header>
 </template>
 <script>
-import { mapState, mapActions } from "vuex"
-import Toolbar from "@/components/Toolbar/Index"
-import ToolbarItem from "@/components/Toolbar/ToolbarItem"
+import {mapState, mapActions} from "vuex"
+import {Toolbar, ToolbarItem} from "@/components/Toolbar"
 
 export default {
   name: 'Sidebar',
@@ -53,7 +52,7 @@ header {
   justify-items: center;
 }
 
-.logo>a {
+.logo > a {
   font-size: 2rem;
   font-weight: 600;
   color: #4CAF50;

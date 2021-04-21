@@ -8,7 +8,8 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter
+@Getter
+@Setter
 public class PostInfoDto {
 
   private Long id;
@@ -35,6 +36,7 @@ public class PostInfoDto {
         .description(post.getDescription())
         .createdBy(post.getCreatedBy())
         .createdTime(post.getCreatedTime())
+        .viewCount(post.getViewCount())
         .build();
   }
 

@@ -1,13 +1,10 @@
 <template>
-  <div>
-    Modal
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
-  name: "Modal",
-
+  name: "Loading"
 }
 </script>
 

@@ -1,7 +1,7 @@
 package com.everoad.blog.backend.domain.post;
 
 import com.everoad.blog.backend.domain.base.BaseEntity;
-import com.everoad.blog.backend.domain.base.BaseTimeEntity;
+import com.everoad.blog.backend.domain.category.Category;
 import com.everoad.blog.backend.dto.post.PostSaveDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,16 +33,27 @@ public class Post extends BaseEntity {
   @Column(name = "description", nullable = false)
   private String description;
 
+  @Column(name = "display", nullable = false)
+  private Boolean display;
+
   @NotAudited
   @Column(name = "view_count", nullable = false)
   private Integer viewCount;
 
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
+
   @Builder
-  public Post(String title, String description) {
+  public Post(String title, String description, Boolean display, Category category) {
     Assert.hasText(title, "title is not empty");
     Assert.hasText(description, "description is not empty");
+    Assert.notNull(display, "display is not null");
     this.title = title;
     this.description = description;
+    this.display = display;
+    this.category = category;
     this.viewCount = 0;
   }
 
