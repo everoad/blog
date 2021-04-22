@@ -36,6 +36,13 @@ public class CategoryService {
         .collect(Collectors.toList());
   }
 
+  public List<CategoryInfoDto> selectCategoryList() {
+    List<Category> categoryList = categoryRepository.findAll();
+    return categoryList.stream()
+        .map(CategoryInfoDto::create)
+        .collect(Collectors.toList());
+  }
+
   public CategoryInfoDto selectCategory(Integer categoryId) {
     Category category = categoryRepository.findById(categoryId)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리 입니다."));
@@ -44,35 +51,23 @@ public class CategoryService {
 
 
   @Transactional
-  public void updateCategoryList(List<CategorySaveDto> saveDtoList) {
-    // 삭제
-    Set<Integer> idSet = saveDtoList.stream()
-        .map(CategorySaveDto::getId)
-        .filter(Objects::nonNull).collect(Collectors.toSet());
-    categoryRepository.deleteAllByIdNotIn(idSet);
-    categoryRepository.flush();
-    
-    // 추가, 수정 그룹
-    Map<Boolean, List<CategorySaveDto>> groupMap = saveDtoList.stream()
-        .collect(Collectors.groupingBy(dto -> dto.getId() != null));
-
-    // 추가
-    if (groupMap.containsKey(false)) {
-      List<Category> saveList = groupMap.get(false).stream()
-          .map(CategorySaveDto::toEntity).collect(Collectors.toList());
-      categoryRepository.saveAll(saveList);
-    }
-
-    // 수정
-    if (groupMap.containsKey(true)) {
-      List<CategorySaveDto> updateList = groupMap.get(true);
-      Map<Integer, CategorySaveDto> map = updateList.stream()
-          .collect(Collectors.toMap(CategorySaveDto::getId, dto -> dto));
-      List<Category> categoryList = categoryRepository.findAllById(map.keySet());
-      for (Category category : categoryList) {
-        CategorySaveDto categorySaveDto = map.get(category.getId());
-        category.update(categorySaveDto);
-      }
-    }
+  public void insertCategory(CategorySaveDto saveDto) {
+    Category category = saveDto.toEntity();
+    categoryRepository.save(category);
   }
+
+  @Transactional
+  public void updateCategory(Integer categoryId, CategorySaveDto saveDto) {
+    Category category = categoryRepository.findById(categoryId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    category.update(saveDto);
+  }
+
+  @Transactional
+  public void deleteCategory(Integer categoryId) {
+    Category category = categoryRepository.findById(categoryId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    categoryRepository.delete(category);
+  }
+
 }

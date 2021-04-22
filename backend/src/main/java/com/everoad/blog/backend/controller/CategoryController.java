@@ -19,8 +19,15 @@ public class CategoryController {
 
   private final CategoryService categoryService;
 
+
   @GetMapping
   public ApiResponse<?> getCategoryList() {
+    List<CategoryInfoDto> list = categoryService.selectCategoryList();
+    return new ApiResponse<>(list);
+  }
+
+  @GetMapping("/sidebar")
+  public ApiResponse<?> getCategoryListWithPostCount() {
     List<CategoryInfoDto> list = categoryService.selectCategoryListWithPostCount();
     return new ApiResponse<>(list);
   }
@@ -32,8 +39,20 @@ public class CategoryController {
   }
 
   @PostMapping
-  public ApiResponse<?> addCategory(@Valid @RequestBody List<CategorySaveDto> saveDtoList) {
-    categoryService.updateCategoryList(saveDtoList);
+  public ApiResponse<?> addCategory(@Valid @RequestBody CategorySaveDto saveDto) {
+    categoryService.insertCategory(saveDto);
+    return new ApiResponse<>();
+  }
+
+  @PutMapping("/{categoryId}")
+  public ApiResponse<?> editCategory(@PathVariable Integer categoryId, @Valid @RequestBody CategorySaveDto saveDto) {
+    categoryService.updateCategory(categoryId, saveDto);
+    return new ApiResponse<>();
+  }
+
+  @DeleteMapping("/{categoryId}")
+  public ApiResponse<?> removeCategory(@PathVariable Integer categoryId) {
+    categoryService.deleteCategory(categoryId);
     return new ApiResponse<>();
   }
 

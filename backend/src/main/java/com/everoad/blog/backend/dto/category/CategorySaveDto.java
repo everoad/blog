@@ -8,13 +8,11 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategorySaveDto {
 
-  private Integer id;
   private String name;
   private Boolean display;
 
   @Builder
-  public CategorySaveDto(Integer id, String name, Boolean display) {
-    this.id = id;
+  public CategorySaveDto(String name, Boolean display) {
     this.name = name;
     this.display = display;
   }

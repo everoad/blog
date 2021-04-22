@@ -1,56 +1,57 @@
 <template>
   <article>
-    <div class="left-panel">
-      <header><span>목록</span></header>
-      <ul class="category-list">
-        <li v-for="item in categories"
-            :key="item.id" @click="handleCategoryClick(item)">
-          <div>
+    <header>
+      <span>목록</span>
+      <button @click="add.mode = !add.mode" :disabled="add.mode">추가</button>
+    </header>
+    <ul class="category-list">
+      <CategoryEditItem
+          v-if="add.mode"
+          :buttons="[
+              {text: '저장', onClick: handleSaveBtnClick},
+              {text: '취소', onClick: handleCancelBtnClick}
+          ]"
+      />
+      <li v-for="item in categories" :key="item.id">
+        <div class="category-info">
+          <div class="drag">
             <font-awesome-icon icon="bars"/>
           </div>
-          <div>{{ item.name }} ({{ item.count }})</div>
-        </li>
-      </ul>
-    </div>
-
-    <div class="right-panel">
-      <header>
-        <span>설정</span>
-        <span>
-          <a >삭제</a>
-          <a >저장</a>
-        </span>
-      </header>
-      <div>
-        <div class="input-wrapper">
-          <div>카테고리명</div>
-          <div>
-            <input type="text" class="input" v-model="selected.name"/>
-          </div>
+          <div class="display" v-if="item.display">공개</div>
+          <div class="display" v-else>비공개</div>
+          <div class="name">{{ item.name }}</div>
         </div>
-        <div class="input-wrapper">
-          <div>공개여부</div>
-          <div>
-            <input type="checkbox" :checked="selected.display"/>
-          </div>
+        <div class="category-manage">
+          <button @click="handleEditBtnClick">수정</button>
+          <button @click="handleRemoveBtnClick(item.id)">삭제</button>
         </div>
-        <div>
-
-        </div>
-      </div>
-    </div>
+      </li>
+    </ul>
   </article>
 </template>
 
 <script>
+import CategoryEditItem from "@/views/category/CategoryEditItem"
+import CategoryItem from "@/views/category/CategoryItem"
 import {categoryService} from "@/services"
+
+const addDefault = {
+  mode: false,
+  name: null,
+  display: true
+}
 
 export default {
   name: 'Category',
+  components: {
+    CategoryEditItem,
+    CategoryItem
+  },
   data() {
     return {
       categories: [],
-      selected: {
+      add: addDefault,
+      edit: {
         id: null,
         name: null,
         display: null
@@ -65,24 +66,28 @@ export default {
       const {data: {body}} = await categoryService.getCategoryList()
       this.categories = body
     },
-    async getCategory(id) {
-      const {data: {body}} = await categoryService.getCategory(id)
-      this.selected = body
+    async handleSaveBtnClick(data) {
+      await categoryService.addCategory(data)
+      await this.getCategoryList()
+      this.add.mode = false
     },
-    handleCategoryClick(category) {
-      this.getCategory(category.id)
+    handleCancelBtnClick() {
+      this.add.mode = false
+    },
+    handleEditBtnClick(category) {
+      this.edit.id = category.id
+      this.edit.name = category.name
+      this.edit.display = category.display
+    },
+    async handleRemoveBtnClick(categoryId) {
+      await categoryService.removeCategory(categoryId)
+      await this.getCategoryList()
     }
   }
 }
 </script>
 <style scoped>
 article {
-  display: flex;
-}
-
-.left-panel,
-.right-panel {
-  flex: 1;
 }
 
 header {
@@ -92,20 +97,6 @@ header {
   font-weight: 600;
   display: flex;
   justify-content: space-between;
-}
-header a {
-  color: #4CAF50;
-  padding: 0 0.5rem;
-  cursor: pointer;
-}
-
-.right-panel {
-  margin-left: 2rem;
-  border: 1px solid #eee;
-}
-
-.right-panel > div {
-  padding: 0.5rem;
 }
 
 .category-list {
@@ -119,37 +110,36 @@ header a {
 
 .category-list > li {
   border: 1px solid #eee;
-  padding: 1rem;
+  line-height: 45px;
   background-color: #fff;
+  display: flex;
+  justify-content: space-between;
 }
 
-.category-list > li > div {
+.category-info {
+  flex: 1;
+}
+
+.category-info > div {
+  margin: 0 1rem;
+  text-align: center;
   display: inline-block;
 }
 
-.category-list > li > div:first-child {
+.category-info > .drag {
   width: 2rem;
-  text-align: center;
-  margin-right: 2rem;
+}
+
+.category-info > .display {
+  width: 4rem;
+}
+
+.category-manage {
+  width: 100px;
 }
 
 .category-list > li + li {
   margin-top: 0.5rem;
 }
 
-.input-wrapper {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  line-height: 35px;
-}
-
-.input-wrapper > div:first-child {
-  width: 6rem;
-  text-align: right;
-  margin-right: 1rem;
-}
-.input-wrapper > div:last-child {
-  flex: 1;
-}
 </style>
