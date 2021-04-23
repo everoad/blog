@@ -1,4 +1,4 @@
-import { authUtils } from '@/helpers'
+import {authUtils} from '@/helpers'
 import axios from "axios"
 
 export const userService = {
@@ -7,8 +7,10 @@ export const userService = {
   userMe
 }
 
+const baseUrl = '/api/auth'
+
 function login(username, password) {
-  return axios.post('/api/auth/login', {username, password})
+  return axios.post(`${baseUrl}/login`, {username, password})
       .then(res => {
         const {accessToken, accessTokenExpiredAt} = res.data.body
         if (accessToken) {
@@ -26,7 +28,7 @@ function userMe(token) {
 }
 
 function logout() {
-  return axios.post('/api/auth/logout', null,{headers: authUtils.getHeader()}).then(() => {
+  return axios.post(`${baseUrl}/logout`, null, {headers: authUtils.getHeader()}).then(() => {
     authUtils.removeToken()
   })
 }

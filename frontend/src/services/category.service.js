@@ -1,11 +1,9 @@
 import {authUtils} from '@/helpers'
 import axios from "axios"
 
-
 export const categoryService = {
   getCategoryList,
   getCategoryListForSidebar,
-  getCategory,
   addCategory,
   editCategory,
   removeCategory
@@ -23,10 +21,6 @@ function getCategoryListForSidebar() {
 
 function addCategory(data) {
   return axios.post(baseUrl, data, {headers: authUtils.getHeader()})
-}
-
-function getCategory(categoryId) {
-  return axios.get(`${baseUrl}/${categoryId}`)
 }
 
 function editCategory(categoryId, data) {

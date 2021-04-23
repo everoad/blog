@@ -27,13 +27,14 @@ export default {
 li {
   cursor: pointer;
   background-color: #fff;
+  text-align: center;
 }
 
 li > a {
   color: #aaa;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  line-height: 2rem;
+  padding: 0.4rem 1rem;
+  line-height: 2.2rem;
 }
 
 li:hover {

@@ -1,21 +1,22 @@
 import {authUtils} from '@/helpers'
 import axios from "axios"
 
-
 export const postService = {
   addPost,
   getPost,
   getPostList
 }
 
+const baseUrl = '/api/posts'
+
 function getPostList(params) {
-  return axios.get('/api/posts', {params})
+  return axios.get(baseUrl, {params})
 }
 
 function addPost(data) {
-  return axios.post('/api/posts', data, {headers: authUtils.getHeader()})
+  return axios.post(baseUrl, data, {headers: authUtils.getHeader()})
 }
 
 function getPost(id) {
-  return axios.get(`/api/posts/${id}`)
+  return axios.get(`${baseUrl}/${id}`)
 }

@@ -1,6 +1,6 @@
 import Vue from "vue"
 import Vuex from "vuex"
-import { auth, category } from "./modules"
+import {auth, category} from "./modules"
 
 Vue.use(Vuex)
 

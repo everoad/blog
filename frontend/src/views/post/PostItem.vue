@@ -2,7 +2,7 @@
   <router-link :to="{ name: 'PostDetail', params: { id: item.id }}" tag="article">
     <div class="content">
       <header>{{ item.title }}</header>
-      <div v-html="item.description.substring(0,120)+'..'"></div>
+      <div v-html="item.description.substring(0, 120) + '...'"></div>
       <footer>
         <div>작성일 {{ item.createdTime | moment('YYYY-MM-DD HH:mm') }}</div>
         <div>조회수 {{ item.viewCount }}</div>
@@ -15,7 +15,6 @@
 <script>
 export default {
   name: 'PostItem',
-  components: {},
   props: {
     item: {
       id: Number,
@@ -45,7 +44,7 @@ article:hover header {
 
 header {
   color: #222;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .content {
@@ -54,6 +53,7 @@ header {
   flex-direction: column;
   justify-content: space-between;
   padding: 0.5rem 0;
+  flex: 1;
 }
 
 .image {

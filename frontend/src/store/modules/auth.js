@@ -4,13 +4,11 @@ import router from "@/routers"
 
 const token = authUtils.getToken()
 
-const state =  {status: {loggedIn: !!token}, user: null}
-
+const state = {status: {loggedIn: !!token}, user: null}
 
 const actions = {
   login({dispatch, commit}, {username, password}) {
     commit('loginRequest', {username})
-
     userService.login(username, password)
         .then(token => {
           userService.userMe(token).then(user => {
@@ -41,11 +39,11 @@ const mutations = {
     state.user = user
   },
   loginFailure(state) {
-    state.status = {loggedIn:false}
+    state.status = {loggedIn: false}
     state.user = null
   },
   logout(state) {
-    state.status = {loggedIn:false}
+    state.status = {loggedIn: false}
     state.user = null
   },
 }

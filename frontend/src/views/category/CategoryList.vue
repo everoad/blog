@@ -83,7 +83,7 @@ export default {
       } else {
         await this.update(id, {name, display})
       }
-      this.clearedit()
+      this.clearEdit()
       this.getData()
     },
     handleEditBtnClick(item) {
@@ -92,7 +92,7 @@ export default {
       this.edit.display = item.display
     },
     handleCancelBtnClick() {
-      this.clearedit()
+      this.clearEdit()
     },
     handleRemoveBtnClick(id) {
       this.remove(id).then(this.getData)
@@ -103,7 +103,7 @@ export default {
     handleChange(event) {
       this.edit.display = event.target.checked
     },
-    clearedit() {
+    clearEdit() {
       this.addMode = false
       this.edit.id = null
       this.edit.name = null
@@ -118,6 +118,7 @@ export default {
   width: 600px;
   margin: 0 auto;
 }
+
 header {
   padding: 1rem;
   border: 1px solid #eee;

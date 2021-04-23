@@ -1,10 +1,10 @@
 <template>
   <article>
     <CategoryList
-      :select="select"
-      :insert="insert"
-      :update="update"
-      :remove="remove" />
+        :select="select"
+        :insert="insert"
+        :update="update"
+        :remove="remove"/>
   </article>
 </template>
 

@@ -40,6 +40,10 @@ export default {
   computed: {
     ...mapState('auth', ['status'])
   },
+  mounted() {
+    const {keyword} = this.$route.query
+    this.keyword = keyword
+  },
   methods: {
     ...mapActions('auth', ['logout']),
     handleLogout() {
@@ -47,8 +51,7 @@ export default {
     },
     async handleSubmit() {
       const {keyword} = this
-      await router.push({path: '/posts', query: {keyword}})
-      this.keyword = null
+      await router.push({path: '/posts', query: keyword ? {keyword} : {}})
     }
   }
 }
@@ -81,17 +84,23 @@ input {
   border-left: 1px solid #ccc;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
   font-size: 1.2rem;
   width: 25rem;
 }
+
 input::placeholder {
   color: #bbb;
 }
+
 input:focus {
   outline: none;
 }
 
 button {
   padding: 0.75rem 1.2rem;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 </style>
