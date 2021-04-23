@@ -5,7 +5,7 @@
       <select id="category" v-model="categoryId" class="input">
         <option :value="-1" disabled>선택</option>
         <option v-for="category in categories" :key="category.id" :value="category.id">
-          {{category.name}}
+          {{ category.name }}
         </option>
       </select>
     </div>
@@ -24,7 +24,7 @@
         <div class="option-item">
           <div>공개여부</div>
           <div>
-            <input type="checkbox" :checked="display" />
+            <input type="checkbox" :checked="display"/>
           </div>
         </div>
       </div>
@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import { Vue2TinymceEditor } from "vue2-tinymce-editor"
+import {Vue2TinymceEditor} from "vue2-tinymce-editor"
+import {mapActions} from "vuex"
 
 import {postService, categoryService} from "@/services"
 import router from "@/routers"
@@ -61,13 +62,15 @@ export default {
     this.$refs.title.focus()
   },
   methods: {
+    ...mapActions('category', ['getCategoryListForSidebar']),
     async getCategories() {
-      const {data:{body}} = await categoryService.getCategoryList()
+      const {data: {body}} = await categoryService.getCategoryList()
       this.categories = body
     },
     async handleSaveBtnClick() {
       const {title, description, display, categoryId} = this
-      const {data:{body}} = await postService.addPost({title, description, display, categoryId})
+      const {data: {body}} = await postService.addPost({title, description, display, categoryId})
+      this.getCategoryListForSidebar()
       router.push(`/posts/${body}`)
     }
   }
@@ -80,30 +83,37 @@ label {
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
+
 .input-wrapper {
   margin-bottom: 2rem;
 }
+
 .option-wrapper {
   border: 1px solid #ccc;
   display: flex;
   flex-wrap: wrap;
 }
+
 .option-item {
   width: 50%;
 }
-.option-item>div {
+
+.option-item > div {
   display: inline-block;
   line-height: 37px;
   padding: 0 0.2rem;
   box-sizing: border-box;
 }
-.option-item>div:first-child {
+
+.option-item > div:first-child {
   width: 6rem;
   text-align: right;
 }
-.option-item>div:last-child {
+
+.option-item > div:last-child {
   width: calc(100% - 6rem);
 }
+
 .btn-wrapper {
   text-align: right;
 }

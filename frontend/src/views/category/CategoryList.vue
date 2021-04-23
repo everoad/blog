@@ -7,18 +7,20 @@
     <ul>
       <CategoryEditItem
           v-if="addMode"
-          :item="editing" :handle-change="handleChange" :handle-input="handleInput">
+          :item="edit" :handle-change="handleChange" :handle-input="handleInput">
         <button class="btn btn-default btn-sm" @click="handleSaveBtnClick">저장</button>
         <button class="btn btn-default btn-sm" @click="handleCancelBtnClick">취소</button>
       </CategoryEditItem>
       <template v-for="item in items">
         <CategoryEditItem
-            v-if="editing.id === item.id"
-            :key="item.id" :item="editing" :handle-change="handleChange" :handle-input="handleInput">
+            v-if="edit.id === item.id"
+            :key="item.id" :item="edit" :handle-change="handleChange" :handle-input="handleInput">
           <button class="btn btn-default btn-sm" @click="handleSaveBtnClick">저장</button>
           <button class="btn btn-default btn-sm" @click="handleCancelBtnClick">취소</button>
         </CategoryEditItem>
-        <CategoryItem v-else :key="item.id" :item="item">
+        <CategoryItem
+            v-else
+            :key="item.id" :item="item">
           <button class="btn btn-default btn-sm" @click="handleEditBtnClick(item)">수정</button>
           <button class="btn btn-default btn-sm" @click="handleRemoveBtnClick(item.id)">삭제</button>
         </CategoryItem>
@@ -59,7 +61,7 @@ export default {
     return {
       items: [],
       addMode: false,
-      editing: {
+      edit: {
         id: null,
         name: null,
         display: true
@@ -75,37 +77,37 @@ export default {
       this.items = body
     },
     async handleSaveBtnClick() {
-      const {addMode, editing: {id, name, display}} = this
+      const {addMode, edit: {id, name, display}} = this
       if (addMode) {
         await this.insert({name, display})
       } else {
         await this.update(id, {name, display})
       }
-      this.clearEditing()
+      this.clearedit()
       this.getData()
     },
     handleEditBtnClick(item) {
-      this.editing.id = item.id
-      this.editing.name = item.name
-      this.editing.display = item.display
+      this.edit.id = item.id
+      this.edit.name = item.name
+      this.edit.display = item.display
     },
     handleCancelBtnClick() {
-      this.clearEditing()
+      this.clearedit()
     },
     handleRemoveBtnClick(id) {
       this.remove(id).then(this.getData)
     },
     handleInput(event) {
-      this.editing.name = event.target.value
+      this.edit.name = event.target.value
     },
     handleChange(event) {
-      this.editing.display = event.target.checked
+      this.edit.display = event.target.checked
     },
-    clearEditing() {
+    clearedit() {
       this.addMode = false
-      this.editing.id = null
-      this.editing.name = null
-      this.editing.display = true
+      this.edit.id = null
+      this.edit.name = null
+      this.edit.display = true
     }
   }
 }
@@ -137,19 +139,4 @@ li + li {
   margin-top: 0.5rem;
 }
 
-li:hover {
-  background-color: rgba(136, 106, 181, 0.04);
-}
-
-/*button {*/
-/*  border: none;*/
-/*  background-color: rgba(0, 0, 0, 0);*/
-/*  outline: none;*/
-/*  cursor: pointer;*/
-/*  color: #4CAF50;*/
-/*}*/
-
-/*button:hover {*/
-/*  text-decoration: underline;*/
-/*}*/
 </style>

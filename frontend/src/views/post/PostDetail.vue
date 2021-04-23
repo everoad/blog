@@ -1,6 +1,6 @@
 <template>
-  <div class="detail-wrapper">
-
+  <LoadingPanel v-if="loading" />
+  <div class="detail-wrapper" v-else>
     <header>
       <div class="image" v-if="item.image" :style="{ 'background-image': 'url(' + item.image + ')' }"></div>
       <div class="title">{{item.title}}</div>
@@ -15,13 +15,17 @@
 </template>
 
 <script>
+import {LoadingPanel} from "@/components/LoadingPanel"
 import {postService} from "@/services"
-
 export default {
   name: 'PostDetail',
+  components: {
+    LoadingPanel
+  },
   props: ['id'],
   data() {
     return {
+      loading: true,
       item: {
         title: null,
         description: null,
@@ -38,6 +42,7 @@ export default {
     async getData() {
       const {data: {body}} = await postService.getPost(this.id)
       this.item = body
+      this.loading = false
     }
   }
 }

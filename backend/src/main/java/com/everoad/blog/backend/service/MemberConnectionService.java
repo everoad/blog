@@ -29,7 +29,7 @@ public class MemberConnectionService {
   }
 
   public Optional<MemberConnection> selectConnectionByMember(Member member) {
-    return connectionRepository.findByMemberAndAccessTokenExpiredAtIsAfter(member, LocalDateTime.now());
+    return connectionRepository.findByMemberAndAccessTokenExpiredAtGreaterThan(member, LocalDateTime.now());
   }
 
   public Optional<MemberConnection> selectConnectionByAccessToken(String accessToken) {
@@ -41,6 +41,10 @@ public class MemberConnectionService {
     return connectionRepository.findByAccessTokenAndRefreshToken(accessToken, refreshToken);
   }
 
+  @Transactional
+  public void deleteConnectionByAccessToken(String accessToken) {
+    connectionRepository.deleteByAccessToken(accessToken);
+  }
 
   @Transactional
   public void deleteConnection(MemberConnection connection) {

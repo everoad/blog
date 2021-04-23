@@ -2,6 +2,7 @@ package com.everoad.blog.backend.service;
 
 import com.everoad.blog.backend.domain.category.Category;
 import com.everoad.blog.backend.domain.category.CategoryRepository;
+import com.everoad.blog.backend.domain.member.Member;
 import com.everoad.blog.backend.domain.post.Post;
 import com.everoad.blog.backend.domain.post.PostQueryRepository;
 import com.everoad.blog.backend.domain.post.PostRepository;
@@ -17,11 +18,13 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -41,8 +44,13 @@ public class PostService {
 
   @Transactional
   public PostInfoDto selectPost(Long postId) {
-    Post post = queryPost(postId);
+    Optional<Post> optionalPost = postRepository.findWithCategoryById(postId);
+    if (optionalPost.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+    Post post = optionalPost.get();
     post.addViewCount();
+
     return PostInfoDto.create(post);
   }
 
@@ -58,7 +66,8 @@ public class PostService {
   @Transactional
   public void updatePost(Long postId, PostSaveDto saveDto) {
     Post post = queryPost(postId);
-    post.updateInfo(saveDto);
+    Category category = queryCategory(saveDto.getCategoryId());
+    post.updateInfo(saveDto, category);
   }
 
   @Transactional

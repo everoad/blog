@@ -3,6 +3,7 @@ package com.everoad.blog.backend.domain.memberConnection;
 import com.everoad.blog.backend.domain.member.Member;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -11,11 +12,14 @@ import java.util.Optional;
 
 public interface MemberConnectionRepository extends JpaRepository<MemberConnection, Long> {
 
-  Optional<MemberConnection> findByMemberAndAccessTokenExpiredAtIsAfter(Member member, LocalDateTime now);
+  Optional<MemberConnection> findByMemberAndAccessTokenExpiredAtGreaterThan(Member member, LocalDateTime now);
 
   @EntityGraph(attributePaths = {"member", "member.roles"})
   Optional<MemberConnection> findByAccessToken(String accessToken);
 
   Optional<MemberConnection> findByAccessTokenAndRefreshToken(String accessToken, String refreshToken);
+
+  @Modifying
+  void deleteByAccessToken(String accessToken);
 
 }

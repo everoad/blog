@@ -22,15 +22,6 @@ class PostServiceTest {
   @Test
   public void 게시글_등록() throws Exception {
     //given
-    int key = 0;
-    PostSaveDto postSaveDto = GenerateUtils.generatePostDto(key);
 
-    //when
-    Long postId = postService.insertPost(postSaveDto);
-
-    //then
-    PostInfoDto postInfoDto = postService.selectPost(postId);
-    assertEquals(postInfoDto.getTitle(), postSaveDto.getTitle());
-    assertEquals(postInfoDto.getDescription(), postSaveDto.getDescription());
   }
 }

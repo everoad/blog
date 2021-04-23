@@ -1,3 +1,5 @@
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 module.exports = {
   // 개발 서버 설정
   devServer: {
@@ -7,6 +9,14 @@ module.exports = {
       '/api': {
         // 프록시 요청을 보낼 서버의 주소
         target: 'http://localhost:8084'
+      }
+    }
+  },
+  configureWebpack: {
+    plugins: [new BundleAnalyzerPlugin()],
+    resolve: {
+      alias: {
+        moment: 'moment/src/moment'
       }
     }
   }

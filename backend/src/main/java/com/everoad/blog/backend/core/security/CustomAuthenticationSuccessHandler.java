@@ -31,8 +31,13 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     MemberAdapter memberAdapter = (MemberAdapter) authentication.getPrincipal();
     Member member = memberAdapter.getMember();
 
-    MemberConnection connection = connectionService.selectConnectionByMember(member)
-        .orElse(connectionService.insertConnection(member));
+    MemberConnection connection;
+    Optional<MemberConnection> optionalConnection = connectionService.selectConnectionByMember(member);
+    if (optionalConnection.isEmpty()) {
+      connection = connectionService.insertConnection(member);
+    } else {
+      connection = optionalConnection.get();
+    }
     // 응답.
     MyUtils.writeResponseJSON(response, new ApiResponse<>(new AuthResponse(connection)));
   }

@@ -69,6 +69,7 @@ header {
 }
 input {
   margin-bottom: 0.5rem;
+  border-radius: 4px;
 }
 button {
   margin-top: 1rem;

@@ -1,23 +1,27 @@
 <template>
-  <div v-if="items.length > 0">
+  <div>
     <PostItem
         v-for="(item, index) in items"
         :item="item"
         :index="index"
-        :key="item.id" />
-  </div>
-  <div v-else class="no-data">
-    게시글이 없습니다.
+        :key="item.id"/>
+    <LoadingPanel v-if="loading" />
+    <div v-else-if="items.length === 0" class="no-data">
+      게시글이 없습니다.
+    </div>
   </div>
 </template>
 
 <script>
 import PostItem from "@/views/post/PostItem"
+import {LoadingPanel} from "@/components/LoadingPanel"
+import debcounce from "debounce"
 
 export default {
   name: "PostList",
   components: {
-    PostItem
+    PostItem,
+    LoadingPanel
   },
   props: {
     select: {
@@ -36,21 +40,24 @@ export default {
     }
   },
   created() {
-    window.addEventListener('scroll', this.handleScroll)
+    window.addEventListener('scroll', debcounce(this.handleScroll, 200))
   },
   mounted() {
-    this.getData()
+    const {categoryId, keyword} = this.$route.query
+    this.filter({categoryId, keyword})
   },
-  destroyed () {
-    window.removeEventListener('scroll', this.handleScroll)
+  destroyed() {
+    window.removeEventListener('scroll', debcounce(this.handleScroll, 200))
   },
   methods: {
     async getData() {
+      this.loading = true
       const {page, size, select, keywords} = this
       const {items, hasNext} = await select({page, size, ...keywords})
       items.forEach(one => this.items.push(one))
       this.hasNext = hasNext
-      this.page += 1
+      this.page = this.page + 1
+      this.loading = false
     },
     filter(keywords) {
       this.keywords = keywords || {}
@@ -59,7 +66,7 @@ export default {
       this.getData()
     },
     handleScroll() {
-      if(this.hasNext
+      if (!this.loading && this.hasNext
           && document.documentElement.scrollTop + window.innerHeight >= document.body.scrollHeight) {
         this.getData()
       }

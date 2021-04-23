@@ -39,8 +39,8 @@ article {
   box-sizing: border-box;
 }
 
-article:hover {
-  background-color: #eee;
+article:hover header {
+  text-decoration: underline;
 }
 
 header {

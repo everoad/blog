@@ -103,6 +103,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
     private final CustomAuthenticationFailureHandler authenticationFailureHandler;
+    private final CustomLogoutSuccessHandler logoutSuccessHandler;
     private final MemberConnectionService connectionService;
     private final AuthTokenProvider authTokenProvider;
     private final ObjectMapper objectMapper;
@@ -168,6 +169,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
           .addFilterBefore(refreshTokenFilter(), UsernamePasswordAuthenticationFilter.class)
           .addFilterBefore(customAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+          .logout()
+          .logoutUrl("/auth/logout")
+          .logoutSuccessHandler(logoutSuccessHandler)
+          .and()
           .exceptionHandling()
           .authenticationEntryPoint(customAuthenticationEntryPoint())
           .accessDeniedHandler(customAccessDeniedHandler())

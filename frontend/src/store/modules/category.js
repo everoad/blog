@@ -22,7 +22,6 @@ const actions = {
 const mutations = {
   getCategoryListRequest(state, categories) {
     state.categories = categories
-    console.log(state)
   }
 }
 

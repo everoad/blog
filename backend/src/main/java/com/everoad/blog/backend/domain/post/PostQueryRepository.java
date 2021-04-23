@@ -28,7 +28,8 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
                 post.title,
                 post.description,
                 post.viewCount,
-                post.createdTime
+                post.createdTime,
+                post.category.id
             )
         )
         .from(post)
@@ -50,7 +51,8 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
                 post.title,
                 post.description,
                 post.viewCount,
-                post.createdTime
+                post.createdTime,
+                post.category.id
             )
         )
         .from(post)

@@ -23,21 +23,5 @@ class CategoryServiceTest {
   @WithUserDetails("tester")
   @Test
   public void 카테고리_등록() throws Exception {
-    //given
-    List<CategorySaveDto> collect = IntStream.range(0, 10)
-        .mapToObj(GenerateUtils::generateCategoryDto).collect(Collectors.toList());
-    categoryService.updateCategoryList(collect);
-
-    List<CategorySaveDto> collect1 = IntStream.range(10, 20)
-        .mapToObj(GenerateUtils::generateCategoryDto).collect(Collectors.toList());
-
-    for (int i = 0; i < collect1.size()/2; i++) {
-      collect1.get(i).setId(i + 1);
-    }
-    categoryService.updateCategoryList(collect1);
-
-
-    List<CategoryInfoDto> all = categoryService.selectCategoryListWithPostCount();
-    all.forEach(System.out::println);
   }
 }

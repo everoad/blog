@@ -57,9 +57,10 @@ public class Post extends BaseEntity {
     this.viewCount = 0;
   }
 
-  public void updateInfo(PostSaveDto saveDto) {
+  public void updateInfo(PostSaveDto saveDto, Category category) {
     this.title = saveDto.getTitle();
     this.description = saveDto.getDescription();
+    this.category = category;
   }
 
   public void addViewCount() {

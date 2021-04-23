@@ -26,10 +26,9 @@ function userMe(token) {
 }
 
 function logout() {
-  authUtils.removeToken()
-  // return axios.delete('/auth/logout', {headers: authUtils.getHeader()}).then(() => {
-  //   authUtils.removeToken()
-  // })
+  return axios.post('/api/auth/logout', null,{headers: authUtils.getHeader()}).then(() => {
+    authUtils.removeToken()
+  })
 }
 
 // function handleResponse(response) {

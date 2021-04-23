@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="container">
     <Header/>
     <main>
       <div>
-        <slot />
+        <slot/>
       </div>
       <Sidebar/>
     </main>
@@ -28,12 +28,12 @@ main {
   display: flex;
   position: relative;
   width: 1080px;
-  margin: 0 auto 100px;
+  margin: 0 auto 200px;
 }
 
-main>div:first-child {
+main > div:first-child {
   width: 800px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 3rem 1.5rem 1.5rem;
 }
 </style>

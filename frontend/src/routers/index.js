@@ -1,10 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Post from "@/views/post/Post"
-import PostEditor from "@/views/post/PostEditor"
 import PostDetail from "@/views/post/PostDetail"
 import Login from "@/views/login/Login"
-import Category from "@/views/category/Category"
 
 import {authUtils} from "@/helpers"
 
@@ -25,7 +23,7 @@ const routes = [
   {
     path: '/posts/editor',
     name: 'PostEditor',
-    component: PostEditor,
+    component: () => import("@/views/post/PostEditor"),
     meta: {authorized: true}
   },
   {
@@ -38,7 +36,7 @@ const routes = [
   {
     path: '/categories',
     name: 'Category',
-    component: Category,
+    component: () => import("@/views/category/Category"),
     meta: {authorized: true, layout: 'system-layout'}
   },
   {
@@ -46,9 +44,6 @@ const routes = [
     name: 'Login',
     component: Login,
     meta: {authorized: false, anonymous: true, layout: 'no-layout'}
-  },
-  {
-    path: '/logout'
   }
 ]
 

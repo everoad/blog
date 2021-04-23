@@ -16,17 +16,22 @@ public class PostInfoDto {
   private String title;
   private String description;
   private String createdBy;
+  private Integer categoryId;
+  private String categoryName;
   private LocalDateTime createdTime;
   private Integer viewCount;
 
   @Builder
-  public PostInfoDto(Long id, String title, String description, String createdBy, LocalDateTime createdTime, Integer viewCount) {
+  public PostInfoDto(Long id, String title, String description, String createdBy, LocalDateTime createdTime,
+                     Integer viewCount, Integer categoryId, String categoryName) {
     this.id = id;
     this.title = title;
     this.description = description;
     this.createdBy = createdBy;
     this.createdTime = createdTime;
     this.viewCount = viewCount;
+    this.categoryId = categoryId;
+    this.categoryName = categoryName;
   }
 
   public static PostInfoDto create(Post post) {
@@ -37,6 +42,8 @@ public class PostInfoDto {
         .createdBy(post.getCreatedBy())
         .createdTime(post.getCreatedTime())
         .viewCount(post.getViewCount())
+        .categoryId(post.getCategory().getId())
+        .categoryName(post.getCategory().getName())
         .build();
   }
 

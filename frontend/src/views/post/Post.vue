@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div>
+
+    </div>
     <PostList
         ref="postList"
         :select="getPostData"/>

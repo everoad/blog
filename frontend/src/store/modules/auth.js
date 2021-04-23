@@ -24,9 +24,10 @@ const actions = {
         })
   },
   logout({commit}) {
-    userService.logout()
-    commit('logout')
-    router.push('/posts')
+    userService.logout().then(() => {
+      commit('logout')
+      router.push('/posts')
+    })
   }
 }
 
