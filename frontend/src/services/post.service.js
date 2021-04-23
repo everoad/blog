@@ -4,6 +4,7 @@ import axios from "axios"
 export const postService = {
   addPost,
   getPost,
+  removePost,
   getPostList
 }
 
@@ -19,4 +20,8 @@ function addPost(data) {
 
 function getPost(id) {
   return axios.get(`${baseUrl}/${id}`)
+}
+
+function removePost(id) {
+  return axios.delete(`${baseUrl}/${id}`, {headers: authUtils.getHeader()})
 }

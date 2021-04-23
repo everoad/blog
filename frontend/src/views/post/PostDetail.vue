@@ -7,6 +7,9 @@
       <div class="info">
         <div>작성일 {{ item.createdTime | moment('YYYY-MM-DD HH:mm') }}</div>
         <div>조회수 {{ item.viewCount }}</div>
+        <div v-if="status.loggedIn">
+          <button class="btn btn-default btn-sm" @click="removePost">삭제</button>
+        </div>
       </div>
     </header>
     <article v-html="item.description"></article>
@@ -14,8 +17,10 @@
 </template>
 
 <script>
+import {mapState} from "vuex"
 import {LoadingPanel} from "@/components/LoadingPanel"
 import {postService} from "@/services"
+import router from "@/routers"
 
 export default {
   name: 'PostDetail',
@@ -23,6 +28,9 @@ export default {
     LoadingPanel
   },
   props: ['id'],
+  computed: {
+    ...mapState('auth', ['status'])
+  },
   data() {
     return {
       loading: true,
@@ -43,7 +51,12 @@ export default {
       const {data: {body}} = await postService.getPost(this.id)
       this.item = body
       this.loading = false
+    },
+    async removePost() {
+      await postService.removePost(this.id)
+      router.push({ path: '/posts' })
     }
+
   }
 }
 </script>
