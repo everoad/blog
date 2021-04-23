@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -27,13 +28,19 @@ public class MemberConnectionService {
     return connection;
   }
 
+  public Optional<MemberConnection> selectConnectionByMember(Member member) {
+    return connectionRepository.findByMemberAndAccessTokenExpiredAtIsAfter(member, LocalDateTime.now());
+  }
+
   public Optional<MemberConnection> selectConnectionByAccessToken(String accessToken) {
     return connectionRepository.findByAccessToken(accessToken);
   }
 
+
   public Optional<MemberConnection> selectConnectionByAccessTokenAndRefreshToken(String accessToken, String refreshToken) {
     return connectionRepository.findByAccessTokenAndRefreshToken(accessToken, refreshToken);
   }
+
 
   @Transactional
   public void deleteConnection(MemberConnection connection) {

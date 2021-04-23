@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex"
+import { mapActions } from "vuex"
 
 export default {
   name: 'Login',
@@ -25,9 +25,6 @@ export default {
       password: null,
       submitted: false
     }
-  },
-  computed: {
-    ...mapState('auth', ['status'])
   },
   mounted() {
     this.$refs.username.focus()

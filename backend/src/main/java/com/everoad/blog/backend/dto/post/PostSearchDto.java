@@ -8,4 +8,6 @@ public class PostSearchDto {
 
   private String keyword;
 
+  private Integer categoryId;
+
 }

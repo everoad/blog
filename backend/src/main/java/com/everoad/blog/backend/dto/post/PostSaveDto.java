@@ -19,7 +19,7 @@ public class PostSaveDto {
   private String description;
   @NotNull
   private Boolean display;
-  @NotBlank
+  @NotNull
   private Integer categoryId;
 
   @Builder

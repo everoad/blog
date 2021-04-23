@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 
 @Component
@@ -29,8 +30,9 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     // 사용자.
     MemberAdapter memberAdapter = (MemberAdapter) authentication.getPrincipal();
     Member member = memberAdapter.getMember();
-    // Connection 정보 생성.
-    MemberConnection connection = connectionService.insertConnection(member);
+
+    MemberConnection connection = connectionService.selectConnectionByMember(member)
+        .orElse(connectionService.insertConnection(member));
     // 응답.
     MyUtils.writeResponseJSON(response, new ApiResponse<>(new AuthResponse(connection)));
   }

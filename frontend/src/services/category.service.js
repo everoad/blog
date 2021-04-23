@@ -4,6 +4,7 @@ import axios from "axios"
 
 export const categoryService = {
   getCategoryList,
+  getCategoryListForSidebar,
   getCategory,
   addCategory,
   editCategory,
@@ -14,6 +15,10 @@ const baseUrl = '/api/categories'
 
 function getCategoryList() {
   return axios.get(baseUrl)
+}
+
+function getCategoryListForSidebar() {
+  return axios.get(`${baseUrl}/sidebar`)
 }
 
 function addCategory(data) {

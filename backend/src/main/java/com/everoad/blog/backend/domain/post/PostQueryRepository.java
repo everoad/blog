@@ -34,7 +34,8 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
         .from(post)
         .where(
             post.display.isTrue(),
-            keywordLike(searchDto.getKeyword())
+            keywordLike(searchDto.getKeyword()),
+            categoryEq(searchDto.getCategoryId())
         )
         .orderBy(post.createdTime.desc())
     );
@@ -55,7 +56,8 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
         .from(post)
         .where(
             post.display.isFalse(),
-            keywordLike(searchDto.getKeyword())
+            keywordLike(searchDto.getKeyword()),
+            categoryEq(searchDto.getCategoryId())
         )
         .orderBy(post.createdTime.desc())
     );
@@ -64,6 +66,10 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
 
   private BooleanExpression keywordLike(String keyword) {
     return StringUtils.hasText(keyword) ? contains(post.title, keyword).or(contains(post.description, keyword)) : null;
+  }
+
+  private BooleanExpression categoryEq(Integer categoryId) {
+    return categoryId != null ? post.category.id.eq(categoryId) : null;
   }
 
 }

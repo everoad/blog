@@ -1,65 +1,34 @@
 <template>
-  <div v-if="items.length > 0">
-    <PostItem
-        v-for="(item, index) in items"
-        :item="item"
-        :index="index"
-        :key="item.id"/>
-  </div>
-  <div v-else class="no-data">
-    게시글이 없습니다.
+  <div>
+    <PostList
+        ref="postList"
+        :select="getPostData"/>
   </div>
 </template>
 
 <script>
-import PostItem from "@/views/post/PostItem"
+import PostList from "@/views/post/PostList"
 import {postService} from "@/services"
 
 export default {
   name: 'Post',
   components: {
-    PostItem
+    PostList
   },
-  data() {
-    return {
-      items: [],
-      hasNext: false,
-      page: 0,
-      size: 10
+  watch: {
+    $route(to) {
+      const {categoryId, keyword} = to.query
+      this.$refs.postList.filter({categoryId, keyword})
     }
   },
-  mounted() {
-    this.getData()
-  },
-  created() {
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  destroyed () {
-    window.removeEventListener('scroll', this.handleScroll)
-  },
   methods: {
-    async getData() {
-      const {page, size} = this
-      const {data: {body: {content, last}}} = await postService.getPostList({page, size})
-      content.forEach(one => this.items.push(one))
-      this.hasNext = !last
-    },
-    handleScroll() {
-      if(this.hasNext
-          && document.documentElement.scrollTop + window.innerHeight >= document.body.scrollHeight) {
-        this.getData()
-      }
+    async getPostData(params) {
+      const {data: {body: {content, last}}} = await postService.getPostList(params)
+      return {items: content, hasNext: !last}
     }
   }
 }
 </script>
 
 <style scoped>
-.no-data {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 300px;
-  font-size: 1.5rem;
-}
 </style>

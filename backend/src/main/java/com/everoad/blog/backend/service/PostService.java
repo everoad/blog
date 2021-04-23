@@ -48,7 +48,7 @@ public class PostService {
 
   @Transactional
   public Long insertPost(PostSaveDto saveDto) {
-    Category category = queryCategory(saveDto);
+    Category category = queryCategory(saveDto.getCategoryId());
     Post post = saveDto.toEntity(category);
     postRepository.save(post);
     return post.getId();
@@ -72,8 +72,8 @@ public class PostService {
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
   }
 
-  private Category queryCategory(PostSaveDto saveDto) {
-    return categoryRepository.findById(saveDto.getCategoryId())
+  private Category queryCategory(Integer categoryId) {
+    return categoryRepository.findById(categoryId)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리 입니다."));
   }
 

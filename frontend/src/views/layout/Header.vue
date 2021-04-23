@@ -4,14 +4,17 @@
       <router-link to="/posts">BLOG</router-link>
     </div>
     <div>
-      <input type="text"/>
-      <button class="icon-btn">
-        <font-awesome-icon icon="search"/>
-      </button>
+      <form @submit.prevent="handleSubmit">
+        <input type="text" v-model="keyword" placeholder="Search.."/>
+        <button class="icon-btn" type="submit">
+          <font-awesome-icon icon="search"/>
+        </button>
+      </form>
     </div>
     <div>
       <Toolbar>
         <ToolbarItem to="/posts/editor" text="글쓰기" :visible="status.loggedIn"/>
+        <ToolbarItem to="/categories" text="카테고리" :visible="status.loggedIn"/>
         <ToolbarItem to="/login" text="로그인" :visible="!status.loggedIn"/>
         <ToolbarItem :click="handleLogout" text="로그아웃" :visible="status.loggedIn"/>
       </Toolbar>
@@ -21,12 +24,18 @@
 <script>
 import {mapState, mapActions} from "vuex"
 import {Toolbar, ToolbarItem} from "@/components/Toolbar"
+import router from "@/routers"
 
 export default {
   name: 'Sidebar',
   components: {
     Toolbar,
     ToolbarItem
+  },
+  data() {
+    return {
+      keyword: null
+    }
   },
   computed: {
     ...mapState('auth', ['status'])
@@ -35,6 +44,11 @@ export default {
     ...mapActions('auth', ['logout']),
     handleLogout() {
       this.logout()
+    },
+    async handleSubmit() {
+      const {keyword} = this
+      await router.push({path: '/posts', query: {keyword}})
+      this.keyword = null
     }
   }
 }
@@ -44,7 +58,7 @@ export default {
 header {
   width: 100%;
   height: 145px;
-  padding: 2rem 6rem;
+  padding: 2rem 12rem;
   border-bottom: 1px solid #eee;
   box-sizing: border-box;
   display: flex;
@@ -60,24 +74,24 @@ header {
 }
 
 input {
-  padding: 0.35rem 1rem;
+  padding: 0.6rem 1rem;
   box-sizing: border-box;
   display: inline-block;
   border-right: 0;
   border-left: 1px solid #ccc;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px;
   font-size: 1.2rem;
+  width: 25rem;
 }
-
+input::placeholder {
+  color: #bbb;
+}
 input:focus {
   outline: none;
 }
 
 button {
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
+  padding: 0.75rem 1.2rem;
 }
 </style>

@@ -1,11 +1,13 @@
 <template>
   <article>
     <div class="input-wrapper">
-      <label for="display">공개여부</label>
-      <input type="checkbox" id="display" :checked="display"/>
-    </div>
-    <div class="input-wrapper">
-
+      <label for="category">카테고리</label>
+      <select id="category" v-model="categoryId" class="input">
+        <option :value="-1" disabled>선택</option>
+        <option v-for="category in categories" :key="category.id" :value="category.id">
+          {{category.name}}
+        </option>
+      </select>
     </div>
     <div class="input-wrapper">
       <label for="title" ref="title">제목</label>
@@ -15,6 +17,19 @@
       <label for="title">내용</label>
       <Vue2TinymceEditor v-model="description"/>
     </div>
+
+    <div class="input-wrapper">
+      <label>설정</label>
+      <div class="option-wrapper">
+        <div class="option-item">
+          <div>공개여부</div>
+          <div>
+            <input type="checkbox" :checked="display" />
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="btn-wrapper">
       <button class="btn btn-green" v-on:click="handleSaveBtnClick">저장</button>
     </div>
@@ -24,7 +39,7 @@
 <script>
 import { Vue2TinymceEditor } from "vue2-tinymce-editor"
 
-import {postService} from "@/services"
+import {postService, categoryService} from "@/services"
 import router from "@/routers"
 
 export default {
@@ -34,18 +49,25 @@ export default {
   },
   data() {
     return {
+      categories: [],
+      categoryId: -1,
       title: null,
       description: null,
       display: true
     }
   },
   mounted() {
+    this.getCategories()
     this.$refs.title.focus()
   },
   methods: {
+    async getCategories() {
+      const {data:{body}} = await categoryService.getCategoryList()
+      this.categories = body
+    },
     async handleSaveBtnClick() {
-      const {title, description, display} = this
-      const {data:{body}} = await postService.addPost({title, description, display})
+      const {title, description, display, categoryId} = this
+      const {data:{body}} = await postService.addPost({title, description, display, categoryId})
       router.push(`/posts/${body}`)
     }
   }
@@ -55,15 +77,33 @@ export default {
 <style scoped>
 label {
   display: block;
-  font-size: 1.1rem;
   font-weight: 600;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
-
 .input-wrapper {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
-
+.option-wrapper {
+  border: 1px solid #ccc;
+  display: flex;
+  flex-wrap: wrap;
+}
+.option-item {
+  width: 50%;
+}
+.option-item>div {
+  display: inline-block;
+  line-height: 37px;
+  padding: 0 0.2rem;
+  box-sizing: border-box;
+}
+.option-item>div:first-child {
+  width: 6rem;
+  text-align: right;
+}
+.option-item>div:last-child {
+  width: calc(100% - 6rem);
+}
 .btn-wrapper {
   text-align: right;
 }

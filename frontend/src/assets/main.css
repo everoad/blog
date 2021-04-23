@@ -48,7 +48,8 @@ table {
 
 html {
     font-size: 14px;
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    /*font-family: Avenir, Helvetica, Arial, sans-serif;*/
+    font-family: AppleSDGothicNeo, Noto Sans KR, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
@@ -61,11 +62,14 @@ textarea.input {
     padding: 0.6rem;
     display: inline-block;
     border: 1px solid #ccc;
-    border-radius: 4px;
     box-sizing: border-box;
     font-family: inherit;
     font-size: inherit;
     color: #555;
+}
+
+select.input {
+    padding: 0.55rem;
 }
 
 textarea.input {
@@ -83,7 +87,25 @@ textarea.input {
 }
 
 .input:focus {
-    outline-color: #4CAF50;
+    outline: none;
+}
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+}
+.custom-checkbox>input[type=checkbox] + label {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #bcbcbc;
+    cursor: pointer;
+}
+.custom-checkbox>input[type=checkbox] {
+    display: none;
+}
+
+.custom-checkbox>input[type=checkbox]:checked + label {
+    background-color: #4CAF50;
 }
 
 .btn {
@@ -95,6 +117,7 @@ textarea.input {
     font-size: 1rem;
     cursor: pointer;
     border-radius: 3px;
+    font-family: inherit;
 }
 
 .btn:focus,
@@ -114,8 +137,8 @@ textarea.input {
 
 .btn-default {
     background-color: #fff;
-    color: #aaa;
-    border: 1px solid #aaa;
+    color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
 }
 
@@ -130,6 +153,11 @@ textarea.input {
 .btn.btn-lg {
     padding: 1rem;
     font-size: 1.2rem;
+}
+
+.btn.btn-sm {
+    padding: 0.1rem 0.5rem;
+    font-size: 0.9rem;
 }
 
 .icon-btn {

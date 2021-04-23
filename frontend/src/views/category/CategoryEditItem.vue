@@ -1,22 +1,22 @@
 <template>
   <li>
-    <div class="category-info">
+    <div>
+      <div class="drag"></div>
+      <div class="display">공개</div>
+      <div class="name">명칭</div>
+      <div class="manage">관리</div>
+    </div>
+    <div>
       <div class="drag"></div>
       <div class="display">
-        공개<br/>
-        <input type="checkbox" :checked="display" name="display" @change="handleChange"/>
+        <input type="checkbox" :checked="item.display" name="display" @change="handleChange"/>
       </div>
       <div class="name">
-        명칭<br/>
-        <input type="text" class="input" :value="name" name="name" @input="handleChange">
+        <input type="text" class="input" :value="item.name" @input="handleInput" ref="name"/>
       </div>
-    </div>
-    <div class="category-manage">
-      관리<br/>
-      <button v-for="(button, index) in buttons"
-              :key="index" @click="handleClick(button.onClick)">
-        {{button.text}}
-      </button>
+      <div class="manage">
+        <slot/>
+      </div>
     </div>
   </li>
 </template>
@@ -24,35 +24,25 @@
 <script>
 export default {
   props: {
-    id: Number,
-    name: String,
-    display: {
-      type:Boolean,
-      default: true
-    },
-    buttons: {
-      type: Array,
-      child: {
-        onClick: Function
+    item: {
+      id: Number,
+      name: String,
+      display: {
+        type: Boolean,
+        default: true
       }
+    },
+    handleInput: {
+      type: Function,
+      required: true
+    },
+    handleChange: {
+      type: Function,
+      required: true
     }
   },
-  data() {
-    return {
-      edit: {
-        name: null,
-        display: true
-      },
-    }
-  },
-  methods: {
-    handleChange(event) {
-      this.edit[event.target.name] = event.target.value
-    },
-    handleClick(handler) {
-      const {id, edit: {display, name}} = this
-      handler({name, display, id})
-    },
+  mounted() {
+    this.$refs.name.focus()
   }
 }
 </script>
@@ -61,31 +51,43 @@ export default {
 
 li {
   border: 1px solid #eee;
-  line-height: 45px;
   background-color: #fff;
+}
+
+li > div {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  line-height: 45px;
 }
 
-.category-info {
-  flex: 1;
+li > div:first-child {
+  border-bottom: 1px solid #eee;
+  line-height: 35px;
 }
 
-.category-info > div {
-  margin: 0 1rem;
+li > div > div {
   text-align: center;
-  display: inline-block;
+  margin: 0 1rem;
 }
 
-.category-info > .drag {
+.drag {
   width: 2rem;
 }
 
-.category-info > .display {
+.display {
   width: 4rem;
 }
 
-.category-manage {
+.name {
+  flex: 1;
+  text-align: left;
+}
+
+.manage {
   width: 100px;
+}
+
+.manage > button + button {
+  margin-left: 0.2rem;
 }
 </style>

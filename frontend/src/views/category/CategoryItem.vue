@@ -1,14 +1,15 @@
 <template>
   <li>
-    <div class="category-info">
-      <div class="drag"><font-awesome-icon icon="bars"/></div>
+    <div>
+      <div class="drag">
+        <font-awesome-icon icon="bars"/>
+      </div>
       <div class="display" v-if="item.display">공개</div>
       <div class="display" v-else>비공개</div>
       <div class="name">{{ item.name }}</div>
-    </div>
-    <div class="category-manage">
-      <button>수정</button>
-      <button>삭제</button>
+      <div class="manage">
+        <slot/>
+      </div>
     </div>
   </li>
 </template>
@@ -18,20 +19,13 @@ export default {
   props: {
     item: {
       name: {
-        type: String
+        type: String,
+        required: true
       },
       display: {
         type: Boolean,
-        default: true
+        required: true
       }
-    },
-    save: {
-      type: Function,
-      required: true
-    },
-    cancel: {
-      type: Function,
-      required: true
     }
   }
 }
@@ -40,31 +34,39 @@ export default {
 <style scoped>
 li {
   border: 1px solid #eee;
-  line-height: 45px;
   background-color: #fff;
+}
+
+li > div {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  line-height: 40px;
 }
 
-.category-info {
-  flex: 1;
-}
-
-.category-info > div {
-  margin: 0 1rem;
+li > div > div {
   text-align: center;
-  display: inline-block;
+  margin: 0 1rem;
 }
 
-.category-info > .drag {
+.drag {
   width: 2rem;
+  cursor: pointer;
 }
 
-.category-info > .display {
+.display {
   width: 4rem;
 }
 
-.category-manage {
+.name {
+  flex: 1;
+  text-align: left;
+}
+
+.manage {
   width: 100px;
+}
+
+.manage > button + button {
+  margin-left: 0.2rem;
 }
 </style>

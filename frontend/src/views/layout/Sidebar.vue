@@ -1,25 +1,26 @@
 <template>
   <aside>
     <nav>
-      <ul class="category">
-        <li><div>전체보기</div></li>
-        <li>
-          <div>WEB</div>
-          <ul>
-            <li>Spring</li>
-            <li>HTML</li>
-          </ul>
-        </li>
-        <li><div>DB</div></li>
+      <ul>
+        <router-link to="/posts" tag="li">전체보기</router-link>
+        <router-link v-for="item in categories" :key="item.id"
+                     :to="{path: '/posts', query: { categoryId: item.id }}" tag="li">
+          <font-awesome-icon icon="caret-right"/>
+          {{item.name}}
+        </router-link>
       </ul>
     </nav>
   </aside>
 </template>
 
 <script>
+import {mapState} from "vuex"
 
 export default {
-  name: 'Sidebar'
+  name: 'Sidebar',
+  computed: {
+    ...mapState('category', ['categories'])
+  }
 }
 </script>
 
@@ -30,12 +31,17 @@ aside {
   box-sizing: border-box;
   padding: 2rem;
 }
-.category li {
-  padding: 0.5rem;
+
+li {
+  padding: 0.6rem 0;
   box-sizing: border-box;
+  cursor: pointer;
+  font-size: 1.1rem;
 }
-.category>li>ul {
-  padding: 0.5rem;
-  color: #999;
+
+li:hover {
+  color: #4CAF50;
+  text-decoration: underline;
 }
+
 </style>

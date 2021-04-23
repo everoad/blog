@@ -19,9 +19,7 @@ import {postService} from "@/services"
 
 export default {
   name: 'PostDetail',
-  props: {
-    id: String
-  },
+  props: ['id'],
   data() {
     return {
       item: {

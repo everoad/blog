@@ -26,6 +26,7 @@ export default {
 <style scoped>
 li {
   cursor: pointer;
+  background-color: #fff;
 }
 
 li > a {

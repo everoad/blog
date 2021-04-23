@@ -17,11 +17,14 @@ const routes = [
   },
   {
     path: '/posts',
+    name: 'Post',
     component: Post,
+    props: true,
     meta: {authorized: false}
   },
   {
     path: '/posts/editor',
+    name: 'PostEditor',
     component: PostEditor,
     meta: {authorized: true}
   },

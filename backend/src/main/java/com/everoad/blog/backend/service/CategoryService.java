@@ -2,6 +2,7 @@ package com.everoad.blog.backend.service;
 
 import com.everoad.blog.backend.domain.category.Category;
 import com.everoad.blog.backend.domain.category.CategoryRepository;
+import com.everoad.blog.backend.domain.post.PostRepository;
 import com.everoad.blog.backend.dto.category.CategoryCountOnly;
 import com.everoad.blog.backend.dto.category.CategoryInfoDto;
 import com.everoad.blog.backend.dto.category.CategorySaveDto;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
   private final CategoryRepository categoryRepository;
+  private final PostRepository postRepository;
 
 
   public List<CategoryInfoDto> selectCategoryListWithPostCount() {
@@ -36,6 +38,7 @@ public class CategoryService {
         .collect(Collectors.toList());
   }
 
+
   public List<CategoryInfoDto> selectCategoryList() {
     List<Category> categoryList = categoryRepository.findAll();
     return categoryList.stream()
@@ -43,9 +46,9 @@ public class CategoryService {
         .collect(Collectors.toList());
   }
 
+
   public CategoryInfoDto selectCategory(Integer categoryId) {
-    Category category = categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리 입니다."));
+    Category category = queryCategory(categoryId);
     return CategoryInfoDto.create(category);
   }
 
@@ -56,18 +59,28 @@ public class CategoryService {
     categoryRepository.save(category);
   }
 
+
   @Transactional
   public void updateCategory(Integer categoryId, CategorySaveDto saveDto) {
-    Category category = categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    Category category = queryCategory(categoryId);
     category.update(saveDto);
   }
 
+
   @Transactional
   public void deleteCategory(Integer categoryId) {
-    Category category = categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    Category category = queryCategory(categoryId);
+    if (postRepository.existsByCategoryId(categoryId)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "카테고리 하위 게시글들이 존재합니다.");
+    }
     categoryRepository.delete(category);
   }
+
+
+  private Category queryCategory(Integer categoryId) {
+    return categoryRepository.findById(categoryId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리 입니다."));
+  }
+
 
 }
