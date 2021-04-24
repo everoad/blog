@@ -5,13 +5,13 @@ import com.everoad.blog.backend.dto.post.PostListDto;
 import com.everoad.blog.backend.dto.post.PostSearchDto;
 import com.everoad.blog.backend.dto.post.QPostListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import static com.everoad.blog.backend.domain.post.QPost.post;
+import static com.everoad.blog.backend.domain.post.QPostFile.postFile;
 
 @Repository
 public class PostQueryRepository extends Querydsl4RepositorySupport {
@@ -29,10 +29,12 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
                 post.description,
                 post.viewCount,
                 post.createdTime,
-                post.category.id
+                post.category.id,
+                post.file.name
             )
         )
         .from(post)
+        .leftJoin(postFile).on(post.file.id.eq(postFile.id))
         .where(
             post.display.isTrue(),
             keywordLike(searchDto.getKeyword()),
@@ -52,7 +54,8 @@ public class PostQueryRepository extends Querydsl4RepositorySupport {
                 post.description,
                 post.viewCount,
                 post.createdTime,
-                post.category.id
+                post.category.id,
+                post.file.name
             )
         )
         .from(post)

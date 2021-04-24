@@ -8,7 +8,13 @@
         <div>조회수 {{ item.viewCount }}</div>
       </footer>
     </div>
-    <div class="image"></div>
+    <div class="image">
+      <div v-if="item.image" :style="{
+        background: `url(/api/images/${item.image}) no-repeat center`,
+        backgroundSize: 'cover'
+      }">
+      </div>
+    </div>
   </router-link>
 </template>
 
@@ -52,7 +58,7 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.5rem 0.5rem 0;
   flex: 1;
 }
 
@@ -61,6 +67,12 @@ header {
   border: 1px solid #eee;
   height: 142px;
   box-sizing: border-box;
+  overflow: hidden;
+}
+
+.image > div {
+  width: 128px;
+  height: 100%;
 }
 
 footer {

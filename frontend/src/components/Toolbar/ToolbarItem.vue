@@ -34,7 +34,7 @@ li > a {
   color: #aaa;
   text-decoration: none;
   padding: 0.4rem 1rem;
-  line-height: 2.2rem;
+  display: block;
 }
 
 li:hover {

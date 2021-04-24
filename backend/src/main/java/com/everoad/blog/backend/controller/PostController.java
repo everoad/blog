@@ -2,15 +2,13 @@ package com.everoad.blog.backend.controller;
 
 import com.everoad.blog.backend.core.dto.ApiResponse;
 import com.everoad.blog.backend.core.lib.Const;
-import com.everoad.blog.backend.dto.post.PostInfoDto;
-import com.everoad.blog.backend.dto.post.PostListDto;
-import com.everoad.blog.backend.dto.post.PostSaveDto;
-import com.everoad.blog.backend.dto.post.PostSearchDto;
+import com.everoad.blog.backend.dto.post.*;
 import com.everoad.blog.backend.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -51,6 +49,12 @@ public class PostController {
   public ApiResponse<?> removePost(@PathVariable Long postId) {
     postService.deletePost(postId);
     return new ApiResponse<>();
+  }
+
+  @PostMapping("/upload")
+  public ApiResponse<?> uploadFile(MultipartFile file) throws Exception {
+    PostFileDto fileDto = postService.upload(file);
+    return new ApiResponse<>(fileDto);
   }
 
 }

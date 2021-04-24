@@ -25,7 +25,7 @@ spring:
 
 app:
   name: BLOG
-  default-path: /app/${app.name}
+  default-path: c:/app/${app.name}
   config-path: ${app.default-path}/config
   upload-path: ${app.default-path}/upload
 

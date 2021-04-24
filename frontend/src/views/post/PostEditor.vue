@@ -1,8 +1,9 @@
 <template>
   <article>
+    <LoadingScreen v-if="loading"/>
     <div class="input-wrapper">
-      <label for="category">카테고리</label>
-      <select id="category" v-model="categoryId" class="input">
+      <label>카테고리</label>
+      <select class="input" v-model="categoryId">
         <option :value="-1" disabled>선택</option>
         <option v-for="category in categories" :key="category.id" :value="category.id">
           {{ category.name }}
@@ -10,78 +11,155 @@
       </select>
     </div>
     <div class="input-wrapper">
-      <label for="title" ref="title">제목</label>
-      <input type="text" class="input" id="title" v-model="title"/>
+      <label>제목</label>
+      <input type="text" class="input" v-model="title"/>
     </div>
     <div class="input-wrapper">
-      <label for="title">내용</label>
+      <label>내용</label>
       <Vue2TinymceEditor v-model="description"/>
     </div>
-
     <div class="input-wrapper">
       <label>설정</label>
       <div class="option-wrapper">
         <div class="option-item">
           <div>공개여부</div>
-          <div>
-            <input type="checkbox" :checked="display"/>
-          </div>
+          <Checkbox v-model="display"/>
+<!--            <input type="checkbox" v-model="display"/>-->
         </div>
       </div>
     </div>
 
+    <div class="input-wrapper">
+      <label>이미지</label>
+      <div>
+        <FileInput accept="image/png,image/jpeg"
+                   :filename="file.originalName"
+                   :on-change="handleFileChange"/>
+        <div class="thumbnail" v-if="file.name" :style="thumbnailStyle"></div>
+      </div>
+    </div>
+
     <div class="btn-wrapper">
-      <button class="btn btn-green" v-on:click="handleSaveBtnClick">저장</button>
+      <button class="btn btn-green" v-if="postId" v-on:click="handleEditBtnClick">수정</button>
+      <button class="btn btn-green" v-else v-on:click="handleSaveBtnClick">저장</button>
     </div>
   </article>
 </template>
 
 <script>
 import {Vue2TinymceEditor} from "vue2-tinymce-editor"
-import {mapActions} from "vuex"
+import {FileInput,Checkbox} from "@/components/Form"
+import {LoadingScreen} from "@/components/LoadingPanel"
+import {mapState, mapActions} from "vuex"
 
-import {postService, categoryService} from "@/services"
+import {postService} from "@/services"
 import router from "@/routers"
 
 export default {
   name: 'PostEditor',
   components: {
-    Vue2TinymceEditor
+    Vue2TinymceEditor,
+    LoadingScreen,
+    FileInput,
+    Checkbox
+  },
+  computed: {
+    ...mapState('category', ['categories']),
+    thumbnailStyle() {
+      return { backgroundImage: `url(/api/images/${this.file.name})` }
+    }
   },
   data() {
     return {
-      categories: [],
+      loading: true,
       categoryId: -1,
+      postId: null,
       title: null,
       description: null,
-      display: true
+      display: true,
+      file: {
+        id: null,
+        originalName: null,
+        name: null,
+        size: null,
+        type: null
+      }
     }
   },
   mounted() {
-    this.getCategories()
-    this.$refs.title.focus()
+    this.init()
   },
   methods: {
     ...mapActions('category', ['getCategoryListForSidebar']),
-    async getCategories() {
-      const {data: {body}} = await categoryService.getCategoryList()
-      this.categories = body
+    async init() {
+      const {postId} = this.$route.query
+      if (postId) {
+        this.postId = postId
+        await this.getPost()
+      }
+      this.loading = false
+    },
+    async getPost() {
+      const {data: {body: {title, description, display, categoryId, file}}} = await postService.getPost(this.postId)
+      this.title = title
+      this.description = description
+      this.display = display
+      this.categoryId = categoryId
+      this.setFile(file)
     },
     async handleSaveBtnClick() {
-      const {title, description, display, categoryId} = this
-      const {data: {body}} = await postService.addPost({title, description, display, categoryId})
+      const {title, description, display, categoryId, file} = this
+      const {data: {body}} = await postService.addPost({title, description, display, categoryId, file})
+      this.redirectDetail(body)
+    },
+    async handleEditBtnClick() {
+      const {postId, title, description, display, categoryId, file} = this
+      await postService.editPost(postId, {title, description, display, categoryId, file})
+      this.redirectDetail(postId)
+    },
+    handleFileChange(files) {
+      if (files.length > 0) {
+        this.uploadFile(files[0])
+      } else {
+        this.setFile({})
+      }
+    },
+    setFile(file) {
+      const {id, originalName, name, size, type} = file
+      this.file.id = id
+      this.file.originalName = originalName
+      this.file.name = name
+      this.file.size = size
+      this.file.type = type
+    },
+    async uploadFile(file) {
+      const formData = new FormData()
+      formData.append("file", file)
+      const {data: {body}} = await postService.uploadFile(formData)
+      this.setFile(body)
+    },
+    redirectDetail(postId) {
       this.getCategoryListForSidebar()
-      router.push(`/posts/${body}`)
+      router.push(`/posts/${postId}`)
+    }
+    ,test(event) {
+      console.log(event.target.checked)
     }
   }
 }
 </script>
 
 <style scoped>
+article {
+  position: relative;
+  padding-top: 2rem;
+}
+
 label {
   display: block;
   font-weight: 600;
   margin-bottom: 0.5rem;
+  color: #555;
 }
 
 .input-wrapper {
@@ -100,8 +178,8 @@ label {
 
 .option-item > div {
   display: inline-block;
-  line-height: 37px;
-  padding: 0 0.2rem;
+  vertical-align: center;
+  padding: 0.6rem 0.2rem;
   box-sizing: border-box;
 }
 
@@ -116,5 +194,16 @@ label {
 
 .btn-wrapper {
   text-align: right;
+}
+
+.thumbnail {
+  margin-top: 1rem;
+  width: 100%;
+  min-height: 400px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 </style>

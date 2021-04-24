@@ -95,7 +95,9 @@ export default {
       this.clearEdit()
     },
     handleRemoveBtnClick(id) {
-      this.remove(id).then(this.getData)
+      if (confirm("삭제하시겠습니까?")) {
+        this.remove(id).then(this.getData)
+      }
     },
     handleInput(event) {
       this.edit.name = event.target.value

@@ -2,13 +2,14 @@
   <LoadingPanel v-if="loading"/>
   <div class="detail-wrapper" v-else>
     <header>
-      <div class="image" v-if="item.image" :style="{ 'background-image': 'url(' + item.image + ')' }"></div>
-      <div class="title">{{ item.title }}</div>
+      <div class="image" v-if="item.file" :style="thumbnailStyle"></div>
+      <div class="title">[ {{item.categoryName}} ] {{ item.title }}</div>
       <div class="info">
         <div>작성일 {{ item.createdTime | moment('YYYY-MM-DD HH:mm') }}</div>
         <div>조회수 {{ item.viewCount }}</div>
-        <div v-if="status.loggedIn">
-          <button class="btn btn-default btn-sm" @click="removePost">삭제</button>
+        <div v-if="status.loggedIn" class="info-btn">
+          <button class="btn btn-default btn-sm" @click="handleEditBtnClick">수정</button>
+          <button class="btn btn-default btn-sm" @click="handleRemoveBtnClick">삭제</button>
         </div>
       </div>
     </header>
@@ -29,7 +30,12 @@ export default {
   },
   props: ['id'],
   computed: {
-    ...mapState('auth', ['status'])
+    ...mapState('auth', ['status']),
+    thumbnailStyle() {
+      return {
+        backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 95%), url(/api/images/${this.item.file.name})`,
+      }
+    }
   },
   data() {
     return {
@@ -39,7 +45,8 @@ export default {
         description: null,
         createdTime: null,
         viewCount: null,
-        image: null
+        file: null,
+        categoryName: null
       }
     }
   },
@@ -52,9 +59,15 @@ export default {
       this.item = body
       this.loading = false
     },
-    async removePost() {
-      await postService.removePost(this.id)
-      router.push({ path: '/posts' })
+    async handleRemoveBtnClick() {
+      if (confirm("삭제하시겠습니까?")) {
+        await postService.removePost(this.id)
+        router.push({path: '/posts'})
+      }
+    },
+    handleEditBtnClick() {
+      const {id} = this
+      router.push({path: '/posts/editor', query: {postId: id}})
     }
 
   }
@@ -67,7 +80,15 @@ export default {
 }
 
 .image {
-
+  overflow: hidden;
+  height: 15rem;
+  margin-bottom: 2rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.image>img {
+  width: 100%;
 }
 
 header {
@@ -93,6 +114,12 @@ header {
 
 .info > div + div {
   margin-left: 1rem;
+}
+.info > .info-btn {
+  float: right;
+}
+.info > .info-btn>button+button {
+  margin-left: 0.2rem;
 }
 
 article {

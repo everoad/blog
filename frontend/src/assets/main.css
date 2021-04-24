@@ -24,6 +24,11 @@ footer, header, hgroup, menu, nav, section {
     display: block;
 }
 
+html, body {
+    height: 100%;
+    margin: 0 !important;
+}
+
 body {
     line-height: 1;
 }
@@ -89,22 +94,25 @@ textarea.input {
 .input:focus {
     outline: none;
 }
+
 .custom-checkbox {
     display: flex;
     align-items: center;
 }
-.custom-checkbox>input[type=checkbox] + label {
+
+.custom-checkbox > input[type=checkbox] + label {
     display: inline-block;
     width: 1rem;
     height: 1rem;
     border: 2px solid #bcbcbc;
     cursor: pointer;
 }
-.custom-checkbox>input[type=checkbox] {
+
+.custom-checkbox > input[type=checkbox] {
     display: none;
 }
 
-.custom-checkbox>input[type=checkbox]:checked + label {
+.custom-checkbox > input[type=checkbox]:checked + label {
     background-color: #4CAF50;
 }
 
@@ -173,4 +181,23 @@ textarea.input {
 
 .icon-btn:hover {
     background-color: rgba(0, 0, 0, 0.1);
+}
+
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 10px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #fff;
+}
+.hide {
+    display: none;
 }

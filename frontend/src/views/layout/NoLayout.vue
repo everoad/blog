@@ -12,7 +12,3 @@ export default {
   name: 'NoLayout'
 }
 </script>
-
-<style scoped>
-
-</style>

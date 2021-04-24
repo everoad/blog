@@ -15,15 +15,18 @@ public class PostListDto {
   private Integer viewCount;
   private LocalDateTime createdTime;
   private Integer categoryId;
+  private String image;
 
   @QueryProjection
-  public PostListDto(Long id, String title, String description, Integer viewCount, LocalDateTime createdTime, Integer categoryId) {
+  public PostListDto(Long id, String title, String description, Integer viewCount, LocalDateTime createdTime,
+                     Integer categoryId, String image) {
     this.id = id;
     this.title = title;
     this.viewCount = viewCount;
     this.description = description;
     this.createdTime = createdTime;
     this.categoryId = categoryId;
+    this.image = image;
   }
 
 }

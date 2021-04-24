@@ -3,18 +3,24 @@
     <div class="logo">
       <router-link to="/posts">BLOG</router-link>
     </div>
-    <div>
+    <div class="center">
       <form @submit.prevent="handleSubmit">
         <input type="text" v-model="keyword" placeholder="Search.."/>
         <button class="icon-btn" type="submit">
           <font-awesome-icon icon="search"/>
         </button>
       </form>
+      <nav>
+        <ul>
+          <router-link to="/posts" tag="li" active-class="active">Post</router-link>
+          <router-link to="/about" tag="li" active-class="active">About</router-link>
+        </ul>
+      </nav>
     </div>
     <div>
       <Toolbar>
         <ToolbarItem to="/posts/editor" text="글쓰기" :visible="status.loggedIn"/>
-        <ToolbarItem to="/categories" text="카테고리" :visible="status.loggedIn"/>
+        <ToolbarItem to="/manage/categories" text="관리자" :visible="status.loggedIn"/>
         <ToolbarItem to="/login" text="로그인" :visible="!status.loggedIn"/>
         <ToolbarItem :click="handleLogout" text="로그아웃" :visible="status.loggedIn"/>
       </Toolbar>
@@ -61,7 +67,7 @@ export default {
 header {
   width: 100%;
   height: 145px;
-  padding: 2rem 12rem;
+  padding: 2rem 12rem 0;
   border-bottom: 1px solid #eee;
   box-sizing: border-box;
   display: flex;
@@ -70,7 +76,7 @@ header {
 }
 
 .logo > a {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 600;
   color: #4CAF50;
   text-decoration: none;
@@ -102,5 +108,24 @@ button {
   padding: 0.75rem 1.2rem;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.center ul li {
+  display: inline-block;
+  padding: 0.6rem 0;
+  width: 5rem;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+}
+.center ul li.active {
+  border-bottom: 2px solid #4CAF50;
+  box-sizing: border-box;
 }
 </style>

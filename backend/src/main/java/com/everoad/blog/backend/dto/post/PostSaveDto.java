@@ -6,7 +6,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Getter
 @Setter
@@ -22,6 +21,8 @@ public class PostSaveDto {
   @NotNull
   private Integer categoryId;
 
+  private PostFileDto file;
+
   @Builder
   public PostSaveDto(String title, String description, Boolean display, Integer categoryId) {
     this.title = title;
@@ -36,6 +37,7 @@ public class PostSaveDto {
         .display(display)
         .description(description)
         .category(category)
+        .fileDto(file)
         .build();
   }
 }

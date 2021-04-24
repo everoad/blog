@@ -10,14 +10,14 @@ import "@/libs/FontAwesomeIcon"
 
 import Layout from "@/views/layout/Layout"
 import NoLayout from "@/views/layout/NoLayout"
-import SystemLayout from "@/views/layout/SystemLayout"
+import ManageLayout from "@/views/layout/ManageLayout"
 
 
 Vue.use(vueMoment)
 
 Vue.component('layout', Layout)
 Vue.component('no-layout', NoLayout)
-Vue.component('system-layout', SystemLayout)
+Vue.component('manage-layout', ManageLayout)
 
 Vue.config.productionTip = false
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="breadcrumb">
-      {{ category }}
+      카테고리 <font-awesome-icon icon="angle-right"/> {{ category }}
     </div>
     <PostList
         ref="postList"
@@ -58,5 +58,6 @@ export default {
   border-bottom: 1px solid #eee;
   color: #555;
   font-weight: 600;
+  margin-bottom: 3rem;
 }
 </style>
