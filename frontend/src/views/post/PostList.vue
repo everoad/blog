@@ -5,7 +5,7 @@
         :item="item"
         :index="index"
         :key="item.id"/>
-    <LoadingPanel v-if="loading" />
+    <PostLoading v-if="loading" />
     <div v-else-if="items.length === 0" class="no-data">
       게시글이 없습니다.
     </div>
@@ -14,14 +14,14 @@
 
 <script>
 import PostItem from "@/views/post/PostItem"
-import {LoadingPanel} from "@/components/LoadingPanel"
+import PostLoading from "@/views/post/PostLoading"
 import debcounce from "debounce"
 
 export default {
   name: "PostList",
   components: {
     PostItem,
-    LoadingPanel
+    PostLoading
   },
   props: {
     select: {

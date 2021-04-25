@@ -6,6 +6,7 @@ import Login from "@/views/login/Login"
 import Manage from "@/views/manage/Manage"
 
 import {authUtils} from "@/helpers"
+import About from "@/views/about/About"
 
 Vue.use(VueRouter)
 
@@ -44,9 +45,20 @@ const routes = [
       {
         path: 'categories',
         component: () => import("@/views/category/Category"),
-        meta: {authorized: true, layout: 'manage-layout'},
+        meta: {authorized: true, sidebar: 'manage-sidebar'},
+      },
+      {
+        path: 'revisions',
+        component: () => import("@/views/revision/Revision"),
+        meta: {authorized: true, sidebar: 'manage-sidebar'},
       }
     ]
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About,
+    meta: {authorized: false}
   },
   {
     path: '/login',

@@ -2,9 +2,9 @@
   <router-link :to="{ name: 'PostDetail', params: { id: item.id }}" tag="article">
     <div class="content">
       <header>{{ item.title }}</header>
-      <div v-html="item.description.substring(0, 120) + '...'"></div>
+      <div v-html="shortDescription"></div>
       <footer>
-        <div>작성일 {{ item.createdTime | moment('YYYY-MM-DD HH:mm') }}</div>
+        <div>작성일 {{ createdTime }}</div>
         <div>조회수 {{ item.viewCount }}</div>
       </footer>
     </div>
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import moment from "moment"
+
 export default {
   name: 'PostItem',
   props: {
@@ -29,6 +31,17 @@ export default {
       description: String,
       createdTime: String,
       viewCount: Number
+    }
+  },
+  computed: {
+    shortDescription() {
+      if (this.item.description.length > 120) {
+        return this.item.description.substring(0, 120) + '...'
+      }
+      return this.item.description
+    },
+    createdTime() {
+      return moment(this.item.createdTime).format('YYYY-MM-DD HH:mm')
     }
   }
 }

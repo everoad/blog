@@ -5,23 +5,25 @@
       <div>
         <slot/>
       </div>
-      <Sidebar/>
+      <component :is="sidebar" />
     </main>
     <div class="footer">
-
     </div>
   </div>
 </template>
 
 <script>
 import Header from "./Header"
-import Sidebar from "./Sidebar"
 
 export default {
   name: 'Layout',
   components: {
-    Header,
-    Sidebar
+    Header
+  },
+  computed: {
+    sidebar() {
+      return (this.$route.meta.sidebar || 'sidebar')
+    }
   }
 }
 </script>
@@ -45,6 +47,8 @@ main > div:first-child {
   padding: 2rem 1.5rem 10rem;
   min-height: 100%;
   height: auto;
+  box-sizing: border-box;
+  position: relative;
 }
 .footer {
   height: 5rem;

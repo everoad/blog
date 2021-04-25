@@ -4,7 +4,7 @@
          @click="handleFileInputClick">
       <span>{{ msg }}</span>
       <span class="remove"
-            v-if="filename"
+            v-if="file"
             @click.stop="handleRemoveBtnClick">
         <font-awesome-icon icon="times"/>
       </span>
@@ -18,9 +18,15 @@
 <script>
 export default {
   props: {
-    filename: {
-      type: String,
-      required: false
+    file: {
+      type: Object,
+      defaults: {
+        id: null,
+        originalName: null,
+        name: null,
+        size: null,
+        type: null
+      }
     },
     onChange: {
       type: Function,
@@ -37,8 +43,8 @@ export default {
   },
   computed: {
     msg() {
-      const {filename, message} = this
-      return filename || message
+      const {file, message} = this
+      return file?.originalName || message
     }
   },
   methods: {
@@ -60,8 +66,8 @@ export default {
 .file {
   cursor: pointer;
   line-height: 36px;
-  border: 1px solid #ccc;
   padding-left: 0.5rem;
+  border: 1px solid #ccc;
 }
 
 .remove {

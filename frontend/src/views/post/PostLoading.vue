@@ -1,5 +1,5 @@
 <template>
-  <div class="loading-panel">
+  <div>
     <font-awesome-icon icon="spinner" spin />
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
 </script>
 
 <style scoped>
-.loading-panel {
+div {
   display: flex;
   justify-content: center;
   align-items: center;

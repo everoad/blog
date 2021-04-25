@@ -1,11 +1,11 @@
 <template>
-  <LoadingPanel v-if="loading"/>
-  <div class="detail-wrapper" v-else>
+  <Loading v-if="loading" class="loading-panel"/>
+  <div v-else class="detail-wrapper">
     <header>
       <div class="image" v-if="item.file" :style="thumbnailStyle"></div>
-      <div class="title">[ {{item.categoryName}} ] {{ item.title }}</div>
+      <div class="title">{{item.categoryName}} <font-awesome-icon icon="angle-right" /> {{ item.title }}</div>
       <div class="info">
-        <div>작성일 {{ item.createdTime | moment('YYYY-MM-DD HH:mm') }}</div>
+        <div>작성일 {{ createdTime }}</div>
         <div>조회수 {{ item.viewCount }}</div>
         <div v-if="status.loggedIn" class="info-btn">
           <button class="btn btn-default btn-sm" @click="handleEditBtnClick">수정</button>
@@ -19,14 +19,15 @@
 
 <script>
 import {mapState} from "vuex"
-import {LoadingPanel} from "@/components/LoadingPanel"
+import {Loading} from "@/components/Loading"
 import {postService} from "@/services"
 import router from "@/routers"
+import moment from "moment"
 
 export default {
   name: 'PostDetail',
   components: {
-    LoadingPanel
+    Loading
   },
   props: ['id'],
   computed: {
@@ -35,6 +36,9 @@ export default {
       return {
         backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5) 95%), url(/api/images/${this.item.file.name})`,
       }
+    },
+    createdTime() {
+      return moment(this.item.createdTime).format('YYYY-MM-DD HH:mm')
     }
   },
   data() {
@@ -87,6 +91,7 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .image>img {
   width: 100%;
 }

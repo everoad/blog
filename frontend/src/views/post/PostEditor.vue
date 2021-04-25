@@ -1,11 +1,12 @@
 <template>
   <article>
-    <LoadingScreen v-if="loading"/>
+    <Loading v-if="loading" class="loading-panel"/>
     <div class="input-wrapper">
       <label>카테고리</label>
       <select class="input" v-model="categoryId">
         <option :value="-1" disabled>선택</option>
-        <option v-for="category in categories" :key="category.id" :value="category.id">
+        <option v-for="category in categories"
+                :key="category.id" :value="category.id">
           {{ category.name }}
         </option>
       </select>
@@ -24,7 +25,6 @@
         <div class="option-item">
           <div>공개여부</div>
           <Checkbox v-model="display"/>
-<!--            <input type="checkbox" v-model="display"/>-->
         </div>
       </div>
     </div>
@@ -33,9 +33,9 @@
       <label>이미지</label>
       <div>
         <FileInput accept="image/png,image/jpeg"
-                   :filename="file.originalName"
+                   :file="file"
                    :on-change="handleFileChange"/>
-        <div class="thumbnail" v-if="file.name" :style="thumbnailStyle"></div>
+        <div class="thumbnail" v-if="file" :style="thumbnailStyle"></div>
       </div>
     </div>
 
@@ -48,8 +48,8 @@
 
 <script>
 import {Vue2TinymceEditor} from "vue2-tinymce-editor"
-import {FileInput,Checkbox} from "@/components/Form"
-import {LoadingScreen} from "@/components/LoadingPanel"
+import {FileInput, Checkbox} from "@/components/Form"
+import {Loading} from "@/components/Loading"
 import {mapState, mapActions} from "vuex"
 
 import {postService} from "@/services"
@@ -59,14 +59,14 @@ export default {
   name: 'PostEditor',
   components: {
     Vue2TinymceEditor,
-    LoadingScreen,
+    Loading,
     FileInput,
     Checkbox
   },
   computed: {
     ...mapState('category', ['categories']),
     thumbnailStyle() {
-      return { backgroundImage: `url(/api/images/${this.file.name})` }
+      return {backgroundImage: `url(/api/images/${this.file.name})`}
     }
   },
   data() {
@@ -77,13 +77,7 @@ export default {
       title: null,
       description: null,
       display: true,
-      file: {
-        id: null,
-        originalName: null,
-        name: null,
-        size: null,
-        type: null
-      }
+      file: null
     }
   },
   mounted() {
@@ -105,15 +99,21 @@ export default {
       this.description = description
       this.display = display
       this.categoryId = categoryId
-      this.setFile(file)
+      this.file = file
     },
     async handleSaveBtnClick() {
       const {title, description, display, categoryId, file} = this
+      if (this.validate({title, description, categoryId})) {
+        return
+      }
       const {data: {body}} = await postService.addPost({title, description, display, categoryId, file})
       this.redirectDetail(body)
     },
     async handleEditBtnClick() {
       const {postId, title, description, display, categoryId, file} = this
+      if (this.validate({title, description, categoryId})) {
+        return
+      }
       await postService.editPost(postId, {title, description, display, categoryId, file})
       this.redirectDetail(postId)
     },
@@ -121,37 +121,41 @@ export default {
       if (files.length > 0) {
         this.uploadFile(files[0])
       } else {
-        this.setFile({})
+        this.file = null
       }
-    },
-    setFile(file) {
-      const {id, originalName, name, size, type} = file
-      this.file.id = id
-      this.file.originalName = originalName
-      this.file.name = name
-      this.file.size = size
-      this.file.type = type
     },
     async uploadFile(file) {
       const formData = new FormData()
       formData.append("file", file)
       const {data: {body}} = await postService.uploadFile(formData)
-      this.setFile(body)
+      this.file = body
     },
     redirectDetail(postId) {
       this.getCategoryListForSidebar()
       router.push(`/posts/${postId}`)
+    },
+    validate(data) {
+      if (data.categoryId === -1) {
+        alert('카테고리를 선택해 주세요.')
+        return true
+      }
+      if (!data.title) {
+        alert('제목을 입력해 주세요.')
+        return true
+      }
+      if (!data.description) {
+        alert('내용을 입력해 주세요.')
+        return true
+      }
+      return false
     }
-    ,test(event) {
-      console.log(event.target.checked)
-    }
+
   }
 }
 </script>
 
 <style scoped>
 article {
-  position: relative;
   padding-top: 2rem;
 }
 

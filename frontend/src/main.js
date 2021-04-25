@@ -1,6 +1,5 @@
 import Vue from "vue"
 import App from "@/App.vue"
-import vueMoment from "vue-moment"
 
 import router from "@/routers/index"
 import store from "@/store/index"
@@ -10,14 +9,13 @@ import "@/libs/FontAwesomeIcon"
 
 import Layout from "@/views/layout/Layout"
 import NoLayout from "@/views/layout/NoLayout"
-import ManageLayout from "@/views/layout/ManageLayout"
-
-
-Vue.use(vueMoment)
+import ManageSidebar from "@/views/layout/ManageSidebar"
+import Sidebar from "@/views/layout/Sidebar"
 
 Vue.component('layout', Layout)
 Vue.component('no-layout', NoLayout)
-Vue.component('manage-layout', ManageLayout)
+Vue.component('sidebar', Sidebar)
+Vue.component('manage-sidebar', ManageSidebar)
 
 Vue.config.productionTip = false
 

@@ -119,13 +119,15 @@ button {
 .center ul li {
   display: inline-block;
   padding: 0.6rem 0;
-  width: 5rem;
+  width: 6rem;
   text-align: center;
   font-weight: 600;
   cursor: pointer;
+  color: #666;
 }
 .center ul li.active {
   border-bottom: 2px solid #4CAF50;
+  color: #4CAF50;
   box-sizing: border-box;
 }
 </style>

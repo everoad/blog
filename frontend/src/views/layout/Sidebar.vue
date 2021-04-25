@@ -2,10 +2,10 @@
   <aside>
     <nav>
       <ul>
-        <router-link to="/posts" tag="li">전체보기 ({{totalCount}})</router-link>
+        <router-link to="/posts" tag="li">전체보기 ({{ totalCount }})</router-link>
         <router-link v-for="item in categories" :key="item.id"
                      :to="{path: '/posts', query: { categoryId: item.id }}" tag="li">
-          {{item.name}} ({{item.count}})
+          {{ item.name }} ({{ item.count }})
         </router-link>
       </ul>
     </nav>
@@ -18,7 +18,9 @@ import {mapActions, mapState} from "vuex"
 export default {
   name: 'Sidebar',
   computed: {
-    ...mapState('category', ['categories']),
+    ...mapState('category', {
+      categories: state => state.categories
+    }),
     totalCount() {
       if (this.categories.length > 0) {
         return this.categories.map(one => one.count).reduce((a, b) => a + b)

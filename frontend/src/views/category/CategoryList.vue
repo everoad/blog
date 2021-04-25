@@ -117,13 +117,12 @@ export default {
 
 <style scoped>
 .category-wrapper {
-  width: 600px;
   margin: 0 auto;
 }
 
 header {
   padding: 1rem;
-  border: 1px solid #eee;
+  /*border: 1px solid #eee;*/
   display: flex;
   justify-content: space-between;
   align-items: center;
