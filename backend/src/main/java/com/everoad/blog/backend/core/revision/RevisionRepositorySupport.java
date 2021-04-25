@@ -9,9 +9,7 @@ import org.hibernate.envers.RevisionType;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.hibernate.envers.query.criteria.MatchMode;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManagerFactory;
@@ -58,6 +56,17 @@ public abstract class RevisionRepositorySupport {
     addConditions(clazzType.getDomainClass(), auditQuery, searchDto);                   // where 문
     List<Object[]> resultList = auditQuery.getResultList();
     return convert(resultList, clazzType);
+  }
+
+  protected Slice<? extends BaseRevisionDto> applyPaginationForSlice(RevisionClassType clazzType, Pageable pageable, RevisionSearchDto searchDto) {
+    AuditQuery auditQuery = getAuditQuery(clazzType.getDomainClass())                   // Domain table 지정, from 문
+        .addOrder(AuditEntity.revisionNumber().desc())                                  // order by 문
+        .setFirstResult((int) pageable.getOffset())
+        .setMaxResults((int) (pageable.getPageSize() + pageable.getOffset()) + 1);          // limit 문
+    addConditions(clazzType.getDomainClass(), auditQuery, searchDto);                   // where 문
+    List<Object[]> resultList = auditQuery.getResultList();
+    List<? extends BaseRevisionDto> content = convert(resultList, clazzType);
+    return toSlice(content, pageable);
   }
 
   /**
@@ -136,6 +145,16 @@ public abstract class RevisionRepositorySupport {
       }
     }
     throw new RuntimeException("");
+  }
+
+  protected <T> Slice<T> toSlice(List<T> content, Pageable pageable) {
+    boolean hasNext = false;
+
+    if (content.size() > pageable.getPageSize()) {
+      content.remove(pageable.getPageSize());
+      hasNext = true;
+    }
+    return new SliceImpl<>(content, pageable, hasNext);
   }
 
   @Getter

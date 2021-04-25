@@ -2,6 +2,7 @@ package com.everoad.blog.backend.core.revision;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
@@ -13,8 +14,8 @@ public class CustomRevisionRepository extends RevisionRepositorySupport {
     super(entityManagerFactory);
   }
 
-  public Page<? extends BaseRevisionDto> findAll(RevisionClassType type, RevisionSearchDto searchDto, Pageable pageable) {
-    return applyPagination(type, pageable, searchDto);
+  public Slice<? extends BaseRevisionDto> findAll(RevisionClassType type, RevisionSearchDto searchDto, Pageable pageable) {
+    return applyPaginationForSlice(type, pageable, searchDto);
   }
 
 }

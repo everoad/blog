@@ -9,6 +9,7 @@
     <div>
       <div class="drag"></div>
       <div class="display">
+<!--        <Checkbox v-model="item.display" />-->
         <input type="checkbox" :checked="item.display" name="display" @change="handleChange"/>
       </div>
       <div class="name">
@@ -22,7 +23,11 @@
 </template>
 
 <script>
+import {Checkbox} from "@/components/Form"
 export default {
+  components: {
+    Checkbox
+  },
   props: {
     item: {
       id: Number,
